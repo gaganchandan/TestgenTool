@@ -5,3 +5,5 @@ ExpoSE/*
 *.o
 *.out
 node_modules/
+*.txt
+*.smt2

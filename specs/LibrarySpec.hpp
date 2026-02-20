@@ -1,7 +1,7 @@
 #pragma once
 
+#include "../language/ast.hh"
 #include <memory>
 #include <vector>
-#include "../ast.hh"
 
 std::unique_ptr<Spec> makeLibrarySpec();

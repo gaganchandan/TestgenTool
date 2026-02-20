@@ -8,6 +8,7 @@
 ## Overview
 
 Unlike schema-based tools (Schemathesis, RESTler) that test APIs in isolation, TestGen reasons about **multi-step stateful workflows** involving:
+
 - Authentication and role-based access control
 - Cross-endpoint entity dependencies
 - Complex state machines and business logic
@@ -60,17 +61,20 @@ TestGen takes a formal API specification written in a custom DSL and produces ex
 ### Installing Dependencies
 
 **Ubuntu/Debian:**
+
 ```bash
 sudo apt-get update
 sudo apt-get install -y build-essential libz3-dev libcurl4-openssl-dev nlohmann-json3-dev cmake
 ```
 
 **macOS (Homebrew):**
+
 ```bash
 brew install z3 curl nlohmann-json cmake
 ```
 
 **Windows (vcpkg):**
+
 ```bash
 vcpkg install z3:x64-windows curl:x64-windows nlohmann-json:x64-windows
 ```
@@ -91,13 +95,13 @@ make run
 
 ### Build Commands
 
-| Command | Description |
-|---------|-------------|
-| `make` | Build the project |
-| `make run` | Build and run the project |
-| `make clean` | Remove built files |
-| `make rebuild` | Clean and rebuild |
-| `make help` | Show help message |
+| Command        | Description               |
+| -------------- | ------------------------- |
+| `make`         | Build the project         |
+| `make run`     | Build and run the project |
+| `make clean`   | Remove built files        |
+| `make rebuild` | Clean and rebuild         |
+| `make help`    | Show help message         |
 
 ### Platform Configuration
 
@@ -154,31 +158,31 @@ g++ -std=c++17 -Wall -I. -Isee -Itester -Ispecs \
 
 ### Test Strings by Application
 
-| Application | Test Strings Location |
-|-------------|----------------------|
+| Application                | Test Strings Location |
+| -------------------------- | --------------------- |
 | Restaurant (Food Ordering) | Uncomment in `main()` |
-| E-commerce | Uncomment in `main()` |
-| Library Management | Uncomment in `main()` |
+| E-commerce                 | Uncomment in `main()` |
+| Library Management         | Uncomment in `main()` |
 
 ### Test Output Files
 
 Test outputs are stored in the `all_tests_files/` folder:
 
-| Application | File Prefix |
-|-------------|-------------|
-| Restaurant (Food Ordering) | `test*.txt` |
-| E-commerce | `test*ecom.txt` |
-| Library Management | `lib*.txt` |
+| Application                | File Prefix     |
+| -------------------------- | --------------- |
+| Restaurant (Food Ordering) | `test*.txt`     |
+| E-commerce                 | `test*ecom.txt` |
+| Library Management         | `lib*.txt`      |
 
 ### Backend Requirements
 
 Before running tests, ensure the corresponding backend is running:
 
-| Application | Default URL |
-|-------------|-------------|
+| Application                | Default URL             |
+| -------------------------- | ----------------------- |
 | Restaurant (Food Ordering) | `http://localhost:9000` |
-| E-commerce | `http://localhost:3000` |
-| Library Management | `http://localhost:8080` |
+| E-commerce                 | `http://localhost:3000` |
+| Library Management         | `http://localhost:8080` |
 
 ## Writing Specifications
 
@@ -242,17 +246,17 @@ Block createProduct {
 
 ### Supported Constraint Types
 
-| Constraint | Description |
-|------------|-------------|
-| `Exists(collection, id)` | Entity exists in collection |
-| `Not(constraint)` | Logical negation |
-| `And(c1, c2, ...)` | Logical conjunction |
-| `Or(c1, c2, ...)` | Logical disjunction |
-| `HasRole(user, role)` | User has specified role |
-| `ValidToken(token)` | Token is valid and not expired |
-| `Equals(var, value)` | Variable equals value |
-| `GreaterThan(var, value)` | Numeric comparison |
-| `InState(entity, state)` | Entity is in specified state |
+| Constraint                | Description                    |
+| ------------------------- | ------------------------------ |
+| `Exists(collection, id)`  | Entity exists in collection    |
+| `Not(constraint)`         | Logical negation               |
+| `And(c1, c2, ...)`        | Logical conjunction            |
+| `Or(c1, c2, ...)`         | Logical disjunction            |
+| `HasRole(user, role)`     | User has specified role        |
+| `ValidToken(token)`       | Token is valid and not expired |
+| `Equals(var, value)`      | Variable equals value          |
+| `GreaterThan(var, value)` | Numeric comparison             |
+| `InState(entity, state)`  | Entity is in specified state   |
 
 ## Project Structure
 
@@ -262,23 +266,23 @@ TestgenTool/
 ├── Makefile                    # Build configuration
 ├── test_libapplication.cpp     # Main entry point (comprises all tests)
 ├── algo.cpp                    # genATC algorithm implementation
-├── algo.hpp                    
+├── algo.hpp
 ├── ast.cc                      # Abstract Syntax Tree implementation
-├── ast.hh                      
+├── ast.hh
 ├── astvisitor.cc               # AST visitor pattern implementation
-├── astvisitor.hh               
+├── astvisitor.hh
 ├── printvisitor.cc             # Print visitor for AST
-├── printvisitor.hh             
+├── printvisitor.hh
 ├── clonevisitor.cc             # Clone visitor for AST
-├── clonevisitor.hh             
+├── clonevisitor.hh
 ├── rewrite_globals_visitor.cc  # Rewrite globals visitor (test API layer)
-├── rewrite_globals_visitor.hh  
+├── rewrite_globals_visitor.hh
 ├── env.cc                      # Environment/state management
-├── env.hh                      
+├── env.hh
 ├── typemap.cc                  # Type mapping utilities
-├── typemap.hh                  
+├── typemap.hh
 ├── symvar.cc                   # Symbolic variable implementation
-├── symvar.hh                   
+├── symvar.hh
 │
 ├── specs/                      # API Specification files
 │   ├── RestaurantSpec.cpp      # Food Ordering API specification
@@ -318,52 +322,52 @@ TestgenTool/
 
 ### Module Descriptions
 
-| Module | Description |
-|--------|-------------|
-| **Makefile** | Build configuration for the project |
-| **test_libapplication.cpp** | Main entry point that runs all test cases |
-| **algo** | genATC algorithm - generates Abstract Test Cases from test strings |
-| **ast** | Abstract Syntax Tree for specification parsing |
-| **printvisitor** | Print visitor for AST visualization |
-| **clonevisitor** | Clone visitor for AST duplication |
-| **rewrite_globals_visitor** | Rewrite globals visitor for test API layer |
-| **env** | Environment and state management across API calls |
-| **symvar** | Symbolic variable definitions and operations |
-| **specs/** | Formal API specifications for each subject application |
-| **tester/** | Concrete Test Case (CTC) generation from symbolic results (genCTC) |
-| **see/** | Symbolic Execution Engine with Z3 solver and HTTP client |
-| **all_tests_files/** | Test output files for all three applications |
+| Module                      | Description                                                        |
+| --------------------------- | ------------------------------------------------------------------ |
+| **Makefile**                | Build configuration for the project                                |
+| **test_libapplication.cpp** | Main entry point that runs all test cases                          |
+| **algo**                    | genATC algorithm - generates Abstract Test Cases from test strings |
+| **ast**                     | Abstract Syntax Tree for specification parsing                     |
+| **printvisitor**            | Print visitor for AST visualization                                |
+| **clonevisitor**            | Clone visitor for AST duplication                                  |
+| **rewrite_globals_visitor** | Rewrite globals visitor for test API layer                         |
+| **env**                     | Environment and state management across API calls                  |
+| **symvar**                  | Symbolic variable definitions and operations                       |
+| **specs/**                  | Formal API specifications for each subject application             |
+| **tester/**                 | Concrete Test Case (CTC) generation from symbolic results (genCTC) |
+| **see/**                    | Symbolic Execution Engine with Z3 solver and HTTP client           |
+| **all_tests_files/**        | Test output files for all three applications                       |
 
 ## Supported Applications
 
 TestGen has been evaluated on three real-world web applications:
 
-| Application | Endpoints | Roles | Test String Length |
-|-------------|-----------|-------|-------------------|
-| E-commerce | 15 | Seller, Buyer | 15 |
-| Food Ordering | 19 | Owner, Customer, Agent | 19 |
-| Library Management | 10 | Admin, Student | 10 |
+| Application        | Endpoints | Roles                  | Test String Length |
+| ------------------ | --------- | ---------------------- | ------------------ |
+| E-commerce         | 15        | Seller, Buyer          | 15                 |
+| Food Ordering      | 19        | Owner, Customer, Agent | 19                 |
+| Library Management | 10        | Admin, Student         | 10                 |
 
 ## Comparison with Other Tools
 
-| Feature | TestGen | RESTler | Schemathesis |
-|---------|---------|---------|--------------|
-| Multi-step workflows | Yes | No | No |
-| Authentication management | Yes | No | No |
-| Role-based testing | Yes | No | No |
-| Entity dependency resolution | Yes | Partial | No |
-| Symbolic execution | Yes | No | No |
-| Constraint solving | Yes | No | No |
-| Infeasibility detection | Yes | No | No |
-| Schema-based fuzzing | No | Yes | Yes |
+| Feature                      | TestGen | RESTler | Schemathesis |
+| ---------------------------- | ------- | ------- | ------------ |
+| Multi-step workflows         | Yes     | No      | No           |
+| Authentication management    | Yes     | No      | No           |
+| Role-based testing           | Yes     | No      | No           |
+| Entity dependency resolution | Yes     | Partial | No           |
+| Symbolic execution           | Yes     | No      | No           |
+| Constraint solving           | Yes     | No      | No           |
+| Infeasibility detection      | Yes     | No      | No           |
+| Schema-based fuzzing         | No      | Yes     | Yes          |
 
 ### OMTSP (Observed Maximum Test String Penetration)
 
-| Application | TestGen | RESTler | Schemathesis |
-|-------------|---------|---------|--------------|
-| E-commerce | 1.00 | 0.07 | 0.13 |
-| Food Ordering | 1.00 | 0.05 | 0.05 |
-| Library | 1.00 | 0.30 | 0.30 |
+| Application   | TestGen | RESTler | Schemathesis |
+| ------------- | ------- | ------- | ------------ |
+| E-commerce    | 1.00    | 0.07    | 0.13         |
+| Food Ordering | 1.00    | 0.05    | 0.05         |
+| Library       | 1.00    | 0.30    | 0.30         |
 
 ## Example Output
 
@@ -379,7 +383,7 @@ $ make run
   Solving with Z3... SAT
   Generated values: email = "seller_test@example.com", password = "Pass123!"
 
-[Step 2/7] loginSeller  
+[Step 2/7] loginSeller
   Precondition: User exists
   Solving with Z3... SAT
   Extracted: token = "eyJhbGciOiJIUzI1NiIs..."
@@ -410,6 +414,7 @@ POST /api/orders -> 201 Created
 ### Common Issues
 
 **Z3 not found:**
+
 ```bash
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 ```

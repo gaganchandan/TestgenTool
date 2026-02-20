@@ -14,12 +14,12 @@ CXXFLAGS = -std=c++17 -Wall -I. -Isee -Itester -Ispecs \
 
 # Platform-specific paths (adjust as needed)
 # macOS (Homebrew)
-INCLUDES = -I/opt/homebrew/include
-LDFLAGS = -L/opt/homebrew/lib
+# INCLUDES = -I/opt/homebrew/include
+# LDFLAGS = -L/opt/homebrew/lib
 
 # Linux (uncomment if using Linux)
-# INCLUDES = -I/usr/include
-# LDFLAGS = -L/usr/lib
+INCLUDES = -I/usr/include
+LDFLAGS = -L/usr/lib
 
 # Libraries
 LIBS = -lz3 -lcurl
@@ -28,16 +28,15 @@ LIBS = -lz3 -lcurl
 TARGET = test_libapplication
 
 # Source files
-SRCS = test_libapplication.cpp \
-       algo.cpp \
-       ast.cc \
-       astvisitor.cc \
-       printvisitor.cc \
-       clonevisitor.cc \
-       rewrite_globals_visitor.cc \
-       symvar.cc \
-       env.cc \
-       typemap.cc \
+SRCS = test/test_libapplication.cpp \
+       tester/algo.cpp \
+       language/ast.cc \
+       language/visitor.cc \
+       language/printer.cc \
+       language/rewrite_globals_visitor.cc \
+       language/symvar.cc \
+       language/env.cc \
+       language/typemap.cc \
        specs/RestaurantSpec.cpp \
        specs/EcommerceSpec.cpp \
        specs/LibrarySpec.cpp \
