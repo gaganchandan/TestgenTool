@@ -477,23 +477,23 @@ bool Decl::operator==(const Decl &other) const {
 //                                     returnType->clone());
 // }
 
-APIFuncDecl::APIFuncDecl(
+FuncDecl::FuncDecl(
     std::string name, std::vector<std::unique_ptr<TypeExpr>> params,
     std::pair<HTTPResponseCode, std::unique_ptr<TypeExpr>> returnType)
     : name(std::move(name)), params(std::move(params)),
       returnType(std::move(returnType)) {}
 
-std::unique_ptr<APIFuncDecl> APIFuncDecl::clone() {
+std::unique_ptr<FuncDecl> FuncDecl::clone() {
   std::vector<std::unique_ptr<TypeExpr>> clonedParams;
   for (const auto &param : params) {
     clonedParams.push_back(param->clone());
   }
-  return std::make_unique<APIFuncDecl>(
+  return std::make_unique<FuncDecl>(
       name, std::move(clonedParams),
       std::make_pair(returnType.first, returnType.second->clone()));
 }
 
-bool APIFuncDecl::operator==(const APIFuncDecl &other) const {
+bool FuncDecl::operator==(const FuncDecl &other) const {
   if (this->name != other.name || this->params.size() != other.params.size() ||
       this->returnType.first != other.returnType.first) {
     return false;
@@ -608,7 +608,7 @@ bool Assert::isEqual(const Stmt &other) const {
 // ================================================================================
 Spec::Spec(std::vector<std::unique_ptr<Decl>> globals,
            std::vector<std::unique_ptr<Init>> init,
-           std::vector<std::unique_ptr<APIFuncDecl>> functions,
+           std::vector<std::unique_ptr<FuncDecl>> functions,
            std::vector<std::unique_ptr<API>> blocks)
     : globals(std::move(globals)), init(std::move(init)),
       functions(std::move(functions)), blocks(std::move(blocks)) {}

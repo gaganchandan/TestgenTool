@@ -169,7 +169,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> uPrimeArgs;
     uPrimeArgs.push_back(make_unique<Var>("U"));
     vector<unique_ptr<Expr>> indexArgs1;
-    indexArgs1.push_back(make_unique<FuncCall>("'", std::move(uPrimeArgs)));
+    indexArgs1.push_back(
+        make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("customerEmail"));
     eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("customerPassword"));
@@ -179,7 +180,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> rolesPrimeArgs;
     rolesPrimeArgs.push_back(make_unique<Var>("Roles"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(rolesPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("customerEmail"));
     eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("CUSTOMER"));
@@ -226,7 +228,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> tPrimeArgs;
     tPrimeArgs.push_back(make_unique<Var>("T"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(tPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("customerEmail"));
     postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));
@@ -332,7 +335,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> cPrimeArgs;
     cPrimeArgs.push_back(make_unique<Var>("C"));
     vector<unique_ptr<Expr>> domArgs3;
-    domArgs3.push_back(make_unique<FuncCall>("'", std::move(cPrimeArgs)));
+    domArgs3.push_back(make_unique<FuncCall>("primed", std::move(cPrimeArgs)));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
     auto post = make_unique<FuncCall>("in", std::move(inArgs3));
 
@@ -379,7 +382,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> oPrimeArgs;
     oPrimeArgs.push_back(make_unique<Var>("O"));
     vector<unique_ptr<Expr>> domArgs3;
-    domArgs3.push_back(make_unique<FuncCall>("'", std::move(oPrimeArgs)));
+    domArgs3.push_back(make_unique<FuncCall>("primed", std::move(oPrimeArgs)));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
     postArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs3)));
 
@@ -389,7 +392,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> cPrimeArgs;
     cPrimeArgs.push_back(make_unique<Var>("C"));
     vector<unique_ptr<Expr>> domArgs4;
-    domArgs4.push_back(make_unique<FuncCall>("'", std::move(cPrimeArgs)));
+    domArgs4.push_back(make_unique<FuncCall>("primed", std::move(cPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs4)));
     postArgs.push_back(make_unique<FuncCall>("not_in", std::move(notInArgs)));
 
@@ -438,7 +441,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> revPrimeArgs;
     revPrimeArgs.push_back(make_unique<Var>("Rev"));
     vector<unique_ptr<Expr>> domArgs3;
-    domArgs3.push_back(make_unique<FuncCall>("'", std::move(revPrimeArgs)));
+    domArgs3.push_back(
+        make_unique<FuncCall>("primed", std::move(revPrimeArgs)));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
     auto post = make_unique<FuncCall>("in", std::move(inArgs3));
 
@@ -478,7 +482,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> uPrimeArgs;
     uPrimeArgs.push_back(make_unique<Var>("U"));
     vector<unique_ptr<Expr>> indexArgs1;
-    indexArgs1.push_back(make_unique<FuncCall>("'", std::move(uPrimeArgs)));
+    indexArgs1.push_back(
+        make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("ownerEmail"));
     eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("ownerPassword"));
@@ -488,7 +493,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> rolesPrimeArgs;
     rolesPrimeArgs.push_back(make_unique<Var>("Roles"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(rolesPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("ownerEmail"));
     eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("OWNER"));
@@ -535,7 +541,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> tPrimeArgs;
     tPrimeArgs.push_back(make_unique<Var>("T"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(tPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("ownerEmail"));
     postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));
@@ -586,7 +593,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> rPrimeArgs;
     rPrimeArgs.push_back(make_unique<Var>("R"));
     vector<unique_ptr<Expr>> domArgs2;
-    domArgs2.push_back(make_unique<FuncCall>("'", std::move(rPrimeArgs)));
+    domArgs2.push_back(make_unique<FuncCall>("primed", std::move(rPrimeArgs)));
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     postArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
@@ -595,7 +602,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     ownersPrimeArgs.push_back(make_unique<Var>("Owners"));
     vector<unique_ptr<Expr>> indexArgs2;
     indexArgs2.push_back(
-        make_unique<FuncCall>("'", std::move(ownersPrimeArgs)));
+        make_unique<FuncCall>("primed", std::move(ownersPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("_result"));
     eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("ownerEmail"));
@@ -700,7 +707,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> mPrimeArgs;
     mPrimeArgs.push_back(make_unique<Var>("M"));
     vector<unique_ptr<Expr>> domArgs3;
-    domArgs3.push_back(make_unique<FuncCall>("'", std::move(mPrimeArgs)));
+    domArgs3.push_back(make_unique<FuncCall>("primed", std::move(mPrimeArgs)));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
     auto post = make_unique<FuncCall>("in", std::move(inArgs3));
 
@@ -773,7 +780,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     assignPrimeArgs.push_back(make_unique<Var>("Assignments"));
     vector<unique_ptr<Expr>> indexArgs3;
     indexArgs3.push_back(
-        make_unique<FuncCall>("'", std::move(assignPrimeArgs)));
+        make_unique<FuncCall>("primed", std::move(assignPrimeArgs)));
     indexArgs3.push_back(make_unique<Var>("orderId"));
     postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs3)));
     postEqArgs.push_back(make_unique<Var>("agentEmail"));
@@ -861,7 +868,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> uPrimeArgs;
     uPrimeArgs.push_back(make_unique<Var>("U"));
     vector<unique_ptr<Expr>> indexArgs1;
-    indexArgs1.push_back(make_unique<FuncCall>("'", std::move(uPrimeArgs)));
+    indexArgs1.push_back(
+        make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("agentEmail"));
     eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("agentPassword"));
@@ -871,7 +879,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> rolesPrimeArgs;
     rolesPrimeArgs.push_back(make_unique<Var>("Roles"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(rolesPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("agentEmail"));
     eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("AGENT"));
@@ -918,7 +927,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> tPrimeArgs;
     tPrimeArgs.push_back(make_unique<Var>("T"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(tPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("agentEmail"));
     postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));

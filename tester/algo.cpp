@@ -64,7 +64,7 @@ void addthedashexpr(const unique_ptr<Expr> &expr, set<string> &res) {
     return;
 
   if (auto func = dynamic_cast<FuncCall *>(expr.get())) {
-    if (func->name == "'") {
+    if (func->name == "'" || func->name == "primed") {
       if (auto v = dynamic_cast<Var *>(func->args[0].get())) {
         res.insert(v->name);
       }
@@ -91,7 +91,7 @@ unique_ptr<Expr> removethedashexpr(const unique_ptr<Expr> &expr,
   }
 
   if (auto func = dynamic_cast<FuncCall *>(expr.get())) {
-    if (func->name == "'") {
+    if (func->name == "'" || func->name == "primed") {
       return removethedashexpr(func->args[0], res, 1);
     }
     vector<unique_ptr<Expr>> args;

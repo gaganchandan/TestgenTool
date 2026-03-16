@@ -18,7 +18,7 @@ class Map;
 class Tuple;
 class PolymorphicFuncCall;
 class Decl;
-class APIFuncDecl;
+class FuncDecl;
 class APIcall;
 class Response;
 class API;
@@ -46,6 +46,7 @@ public:
 
 protected:
   // Type Expression visitors - to be implemented by concrete visitors
+  virtual void visitTypeVar(const TypeVar &node) = 0;
   virtual void visitTypeConst(const TypeConst &node) = 0;
   virtual void visitFuncType(const FuncType &node) = 0;
   virtual void visitMapType(const MapType &node) = 0;

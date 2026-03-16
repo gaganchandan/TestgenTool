@@ -30,7 +30,7 @@ unique_ptr<Expr> SEE::computePathConstraint(vector<Expr *> C) {
     vector<unique_ptr<Expr>> args;
     args.push_back(make_unique<Num>(1));
     args.push_back(make_unique<Num>(1));
-    return make_unique<FuncCall>("Eq", std::move(args));
+    return make_unique<FuncCall>("equals", std::move(args));
   }
 
   if (C.size() == 1) {
@@ -46,7 +46,7 @@ unique_ptr<Expr> SEE::computePathConstraint(vector<Expr *> C) {
     vector<unique_ptr<Expr>> args;
     args.push_back(C[i]->clone());
     args.push_back(std::move(result));
-    result = make_unique<FuncCall>("And", std::move(args));
+    result = make_unique<FuncCall>("and", std::move(args));
   }
 
   return result;
@@ -219,12 +219,12 @@ bool SEE::isAPI(const FuncCall &fc) {
   // Built-in functions that are NOT API calls
   static const set<string> builtInFunctions = {
       // Arithmetic
-      "Add", "Sub", "Mul", "Div",
+      "add", "sub", "mul", "div",
       // Comparison
-      "Eq", "Lt", "Gt", "Le", "Ge", "Neq", "=", "==", "!=", "<>", "<", ">",
+      "equals", "lt", "gt", "le", "ge", "not_equals", "=", "==", "!=", "<", ">",
       "<=", ">=",
       // Logical
-      "And", "Or", "Not", "Implies", "and", "or", "not", "&&", "||", "!",
+      "implies", "and", "or", "not", "&&", "||", "!",
       // Input
       "input",
       // Set operations
@@ -233,12 +233,12 @@ bool SEE::isAPI(const FuncCall &fc) {
       "subset", "is_subset", "add_to_set", "remove_from_set", "is_empty_set",
       // Map operations
       "get", "put", "lookup", "select", "store", "update", "contains_key",
-      "has_key",
+      "has_key", "dom", "range",
       // List/Sequence operations
       "concat", "append_list", "length", "at", "nth", "prefix", "suffix",
       "contains_seq",
       // Prime notation (for postconditions)
-      "'"};
+      "'", "primed"};
 
   return builtInFunctions.find(fc.name) == builtInFunctions.end();
 }
@@ -786,7 +786,7 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st) {
     }
 
     // Handle = (equality)
-    if ((fc.name == "=" || fc.name == "Eq" || fc.name == "==") &&
+    if ((fc.name == "=" || fc.name == "equals" || fc.name == "==") &&
         fc.args.size() == 2) {
       cout << "    [EVAL] Equality: Eq" << endl;
       Expr *left = evaluateExpr(*fc.args[0], st);
@@ -819,7 +819,7 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st) {
       std::vector<unique_ptr<Expr>> args;
       args.push_back(left->clone());
       args.push_back(right->clone());
-      return new FuncCall("Eq", std::move(args));
+      return new FuncCall("equals", std::move(args));
     }
 
     // Handle AND (n-ary)
@@ -909,7 +909,7 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st) {
       std::vector<unique_ptr<Expr>> args;
       args.push_back(left->clone());
       args.push_back(right->clone());
-      return new FuncCall("And", std::move(args));
+      return new FuncCall("and", std::move(args));
     }
 
     if ((fc.name == "Or" || fc.name == "or" || fc.name == "||") &&
@@ -932,7 +932,7 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st) {
       std::vector<unique_ptr<Expr>> args;
       args.push_back(left->clone());
       args.push_back(right->clone());
-      return new FuncCall("Or", std::move(args));
+      return new FuncCall("or", std::move(args));
     }
 
     if ((fc.name == "Not" || fc.name == "not" || fc.name == "!") &&
@@ -952,7 +952,7 @@ Expr *SEE::evaluateExpr(Expr &expr, SymbolTable &st) {
       cout << "    [EVAL] Symbolic Not, returning UnaryOpExpr(NOT)" << endl;
       std::vector<unique_ptr<Expr>> args;
       args.push_back(operand->clone());
-      return new FuncCall("Not", std::move(args));
+      return new FuncCall("not", std::move(args));
     }
 
     // ================================================================
