@@ -7,6 +7,10 @@ void Printer::visitTypeConst(const TypeConst &node) {
   std::cout << node.toString();
 }
 
+void Printer::visitTypeVar(const TypeVar &node) {
+  std::cout << node.toString();
+}
+
 void Printer::visitFuncType(const FuncType &node) {
   std::cout << node.toString();
 }
@@ -65,6 +69,18 @@ void Printer::visitAssert(const Assert &node) {
 void Printer::visitDecl(const Decl &node) {
   std::cout << node.name << ": ";
   visit(node.type.get());
+}
+
+void Printer::visitFuncDecl(const FuncDecl &node) {
+  std::cout << node.name << " : ";
+  for (size_t i = 0; i < node.params.size(); i++) {
+    visit(node.params[i].get());
+    if (i < node.params.size() - 1) {
+      std::cout << " -> ";
+    }
+  }
+  std::cout << " -> ";
+  visit(node.returnType.second.get());
 }
 
 void Printer::visitAPIcall(const APIcall &node) {

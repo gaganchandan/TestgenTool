@@ -33,6 +33,7 @@ private:
 
 protected:
   // Type Expression visitors
+  void visitTypeVar(const TypeVar &node) override;
   void visitTypeConst(const TypeConst &node) override;
   void visitFuncType(const FuncType &node) override;
   void visitMapType(const MapType &node) override;
@@ -59,6 +60,7 @@ public:
 
   // High-level visitors
   void visitDecl(const Decl &node) override;
+  void visitFuncDecl(const FuncDecl &node) override;
   void visitAPIcall(const APIcall &node) override;
   void visitAPI(const API &node) override;
   void visitResponse(const Response &node) override;

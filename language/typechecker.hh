@@ -14,11 +14,13 @@ private:
   std::vector<std::pair<TypeExpr *, TypeExpr *>> constraints;
 
 protected:
-  // void visitTypeConst(const TypeConst &node) override;
-  // void visitFuncType(const FuncType &node) override;
-  // void visitMapType(const MapType &node) override;
-  // void visitTupleType(const TupleType &node) override;
-  // void visitSetType(const SetType &node) override;
+  // Type Expression visitors
+  void visitTypeVar(const TypeVar &node) override {}
+  void visitTypeConst(const TypeConst &node) override {}
+  void visitFuncType(const FuncType &node) override {}
+  void visitMapType(const MapType &node) override {}
+  void visitTupleType(const TupleType &node) override {}
+  void visitSetType(const SetType &node) override {}
 
   void visitNum(const Num &node) override;
   void visitString(const String &node) override;
@@ -34,6 +36,9 @@ protected:
 
   // void visitAssign(const Assign &node) override;
   // void visitFuncCallStmt(const FuncCallStmt &node) override;
+  void visitAssign(const Assign &node) override {}
+  void visitAssume(const Assume &node) override {}
+  void visitAssert(const Assert &node) override {}
 
 public:
   std::string freshTypeVar();
@@ -59,7 +64,7 @@ public:
   void visitDecl(const Decl &node) override;
   void visitFuncDecl(const FuncDecl &node) override;
 
-  void visitAPICall(const APIcall &node) override;
+  void visitAPIcall(const APIcall &node) override;
   void visitAPI(const API &node) override;
   void visitResponse(const Response &node) override;
 

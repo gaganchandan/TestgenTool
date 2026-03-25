@@ -1,6 +1,7 @@
 #pragma once
 
 // Forward declarations
+class TypeVar;
 class TypeConst;
 class FuncType;
 class MapType;
@@ -71,6 +72,7 @@ protected:
 public:
   // High-level visitors for complex structures
   virtual void visitDecl(const Decl &node) = 0;
+  virtual void visitFuncDecl(const FuncDecl &node) = 0;
   virtual void visitAPIcall(const APIcall &node) = 0;
   virtual void visitAPI(const API &node) = 0;
   virtual void visitResponse(const Response &node) = 0;

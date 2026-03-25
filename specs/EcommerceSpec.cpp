@@ -65,7 +65,47 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
    * 3. FUNCTION DECLARATIONS (none)
    * ===================================================== */
 
-  vector<unique_ptr<APIFuncDecl>> functions;
+  vector<unique_ptr<FuncDecl>> functions;
+  vector<unique_ptr<TypeExpr>> params;
+
+  // login: string -> string -> 'a
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "login", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getAllProducts: 'a
+  params.clear();
+  functions.push_back(make_unique<FuncDecl>(
+      "getAllProducts", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getProductById: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getProductById", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // addToCart: string -> string -> int -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(make_unique<TypeConst>("int"));
+  functions.push_back(make_unique<FuncDecl>(
+      "addToCart", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getCart: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getCart", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // updateCart: string -> string -> int -> 'a
+  params.clear();
 
   /* =====================================================
    * 4. API BLOCKS
@@ -103,23 +143,25 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> uPrimeArgs;
     uPrimeArgs.push_back(make_unique<Var>("U"));
     vector<unique_ptr<Expr>> indexArgs1;
-    indexArgs1.push_back(make_unique<FuncCall>("'", std::move(uPrimeArgs)));
+    indexArgs1.push_back(
+        make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("buyerEmail"));
-    eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
+    eq1Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("buyerPassword"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq1Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq1Args)));
 
     vector<unique_ptr<Expr>> eq2Args;
     vector<unique_ptr<Expr>> rolesPrimeArgs;
     rolesPrimeArgs.push_back(make_unique<Var>("Roles"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(rolesPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("buyerEmail"));
-    eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eq2Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("BUYER"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq2Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq2Args)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("registerBuyerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -142,19 +184,20 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("U"));
     indexArgs.push_back(make_unique<Var>("buyerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("buyerPassword"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
     vector<unique_ptr<Expr>> roleEqArgs;
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("buyerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("BUYER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: login(buyerEmail, buyerPassword)
     vector<unique_ptr<Expr>> callArgs;
@@ -169,11 +212,12 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> tPrimeArgs;
     tPrimeArgs.push_back(make_unique<Var>("T"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(tPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("buyerEmail"));
-    postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    postEqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));
-    auto post = make_unique<FuncCall>("=", std::move(postEqArgs));
+    auto post = make_unique<FuncCall>("equals", std::move(postEqArgs));
 
     blocks.push_back(make_unique<API>("loginBuyerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -191,7 +235,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getAllProductsOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -215,7 +259,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getProductByIdOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -238,9 +282,10 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("buyerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("BUYER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("productId"));
@@ -249,7 +294,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: addToCart(buyerEmail, productId, quantity)
     vector<unique_ptr<Expr>> callArgs;
@@ -266,7 +311,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> cPrimeArgs;
     cPrimeArgs.push_back(make_unique<Var>("C"));
     vector<unique_ptr<Expr>> domArgs3;
-    domArgs3.push_back(make_unique<FuncCall>("'", std::move(cPrimeArgs)));
+    domArgs3.push_back(make_unique<FuncCall>("primed", std::move(cPrimeArgs)));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
     auto post = make_unique<FuncCall>("in", std::move(inArgs3));
 
@@ -290,11 +335,12 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("buyerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("BUYER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: getCart(buyerEmail)
     vector<unique_ptr<Expr>> callArgs;
@@ -304,7 +350,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getCartOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -327,9 +373,10 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("buyerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("BUYER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("buyerEmail"));
@@ -338,7 +385,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: updateCart(buyerEmail, productId, quantity)
     vector<unique_ptr<Expr>> callArgs;
@@ -350,7 +397,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("updateCartOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -373,9 +420,10 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("buyerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("BUYER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("buyerEmail"));
@@ -384,7 +432,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: createOrder(buyerEmail, shippingAddress, paymentMethod)
     vector<unique_ptr<Expr>> callArgs;
@@ -405,7 +453,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> oPrimeArgs;
     oPrimeArgs.push_back(make_unique<Var>("O"));
     vector<unique_ptr<Expr>> domArgs3;
-    domArgs3.push_back(make_unique<FuncCall>("'", std::move(oPrimeArgs)));
+    domArgs3.push_back(make_unique<FuncCall>("primed", std::move(oPrimeArgs)));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
     postArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs3)));
 
@@ -415,12 +463,13 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     statusPrimeArgs.push_back(make_unique<Var>("OrderStatus"));
     vector<unique_ptr<Expr>> statusIndexArgs;
     statusIndexArgs.push_back(
-        make_unique<FuncCall>("'", std::move(statusPrimeArgs)));
+        make_unique<FuncCall>("primed", std::move(statusPrimeArgs)));
     statusIndexArgs.push_back(make_unique<Var>("_result"));
     statusEqArgs.push_back(
-        make_unique<FuncCall>("[]", std::move(statusIndexArgs)));
+        make_unique<FuncCall>("get", std::move(statusIndexArgs)));
     statusEqArgs.push_back(make_unique<Var>("PENDING"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(statusEqArgs)));
+    postArgs.push_back(
+        make_unique<FuncCall>("equals", std::move(statusEqArgs)));
 
     // buyerEmail not_in dom(C') - cart cleared
     vector<unique_ptr<Expr>> notInArgs;
@@ -428,11 +477,11 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> cPrimeArgs;
     cPrimeArgs.push_back(make_unique<Var>("C"));
     vector<unique_ptr<Expr>> domArgs4;
-    domArgs4.push_back(make_unique<FuncCall>("'", std::move(cPrimeArgs)));
+    domArgs4.push_back(make_unique<FuncCall>("primed", std::move(cPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs4)));
     postArgs.push_back(make_unique<FuncCall>("not_in", std::move(notInArgs)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("createOrderOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -454,11 +503,12 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("buyerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("BUYER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: getBuyerOrders(buyerEmail)
     vector<unique_ptr<Expr>> callArgs;
@@ -468,7 +518,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getBuyerOrdersOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -491,9 +541,10 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("buyerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("BUYER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("orderId"));
@@ -508,11 +559,11 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     ownerIndexArgs.push_back(make_unique<Var>("O"));
     ownerIndexArgs.push_back(make_unique<Var>("orderId"));
     ownerEqArgs.push_back(
-        make_unique<FuncCall>("[]", std::move(ownerIndexArgs)));
+        make_unique<FuncCall>("get", std::move(ownerIndexArgs)));
     ownerEqArgs.push_back(make_unique<Var>("buyerEmail"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(ownerEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(ownerEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: createReview(buyerEmail, productId, orderId, rating, comment)
     vector<unique_ptr<Expr>> callArgs;
@@ -531,7 +582,8 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> revPrimeArgs;
     revPrimeArgs.push_back(make_unique<Var>("Rev"));
     vector<unique_ptr<Expr>> domArgs3;
-    domArgs3.push_back(make_unique<FuncCall>("'", std::move(revPrimeArgs)));
+    domArgs3.push_back(
+        make_unique<FuncCall>("primed", std::move(revPrimeArgs)));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
     auto post = make_unique<FuncCall>("in", std::move(inArgs3));
 
@@ -557,7 +609,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getProductReviewsOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -596,23 +648,25 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> uPrimeArgs;
     uPrimeArgs.push_back(make_unique<Var>("U"));
     vector<unique_ptr<Expr>> indexArgs1;
-    indexArgs1.push_back(make_unique<FuncCall>("'", std::move(uPrimeArgs)));
+    indexArgs1.push_back(
+        make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("sellerEmail"));
-    eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
+    eq1Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("sellerPassword"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq1Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq1Args)));
 
     vector<unique_ptr<Expr>> eq2Args;
     vector<unique_ptr<Expr>> rolesPrimeArgs;
     rolesPrimeArgs.push_back(make_unique<Var>("Roles"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(rolesPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("sellerEmail"));
-    eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eq2Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("SELLER"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq2Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq2Args)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("registerSellerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -635,19 +689,20 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("U"));
     indexArgs.push_back(make_unique<Var>("sellerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("sellerPassword"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
     vector<unique_ptr<Expr>> roleEqArgs;
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("sellerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("SELLER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: login(sellerEmail, sellerPassword)
     vector<unique_ptr<Expr>> callArgs;
@@ -662,11 +717,12 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> tPrimeArgs;
     tPrimeArgs.push_back(make_unique<Var>("T"));
     vector<unique_ptr<Expr>> indexArgs2;
-    indexArgs2.push_back(make_unique<FuncCall>("'", std::move(tPrimeArgs)));
+    indexArgs2.push_back(
+        make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("sellerEmail"));
-    postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    postEqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));
-    auto post = make_unique<FuncCall>("=", std::move(postEqArgs));
+    auto post = make_unique<FuncCall>("equals", std::move(postEqArgs));
 
     blocks.push_back(make_unique<API>("loginSellerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -688,11 +744,11 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("Roles"));
     indexArgs.push_back(make_unique<Var>("sellerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("SELLER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: createProduct(sellerEmail, title, description, category, price,
     // quantity)
@@ -715,7 +771,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> pPrimeArgs;
     pPrimeArgs.push_back(make_unique<Var>("P"));
     vector<unique_ptr<Expr>> domArgs2;
-    domArgs2.push_back(make_unique<FuncCall>("'", std::move(pPrimeArgs)));
+    domArgs2.push_back(make_unique<FuncCall>("primed", std::move(pPrimeArgs)));
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     postArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
@@ -724,13 +780,13 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     sellersPrimeArgs.push_back(make_unique<Var>("Sellers"));
     vector<unique_ptr<Expr>> indexArgs2;
     indexArgs2.push_back(
-        make_unique<FuncCall>("'", std::move(sellersPrimeArgs)));
+        make_unique<FuncCall>("primed", std::move(sellersPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("_result"));
-    eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eq2Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("sellerEmail"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq2Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq2Args)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("createProductOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -753,9 +809,10 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("sellerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("SELLER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("productId"));
@@ -769,11 +826,11 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     ownerIndexArgs.push_back(make_unique<Var>("Sellers"));
     ownerIndexArgs.push_back(make_unique<Var>("productId"));
     ownerEqArgs.push_back(
-        make_unique<FuncCall>("[]", std::move(ownerIndexArgs)));
+        make_unique<FuncCall>("get", std::move(ownerIndexArgs)));
     ownerEqArgs.push_back(make_unique<Var>("sellerEmail"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(ownerEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(ownerEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: updateProduct(sellerEmail, productId, title, description, category,
     // price, quantity)
@@ -790,7 +847,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("updateProductOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -813,20 +870,21 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("sellerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("SELLER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
     vector<unique_ptr<Expr>> ownerEqArgs;
     vector<unique_ptr<Expr>> ownerIndexArgs;
     ownerIndexArgs.push_back(make_unique<Var>("Sellers"));
     ownerIndexArgs.push_back(make_unique<Var>("productId"));
     ownerEqArgs.push_back(
-        make_unique<FuncCall>("[]", std::move(ownerIndexArgs)));
+        make_unique<FuncCall>("get", std::move(ownerIndexArgs)));
     ownerEqArgs.push_back(make_unique<Var>("sellerEmail"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(ownerEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(ownerEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: deleteProduct(sellerEmail, productId)
     vector<unique_ptr<Expr>> callArgs;
@@ -842,7 +900,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> pPrimeArgs;
     pPrimeArgs.push_back(make_unique<Var>("P"));
     vector<unique_ptr<Expr>> domArgs2;
-    domArgs2.push_back(make_unique<FuncCall>("'", std::move(pPrimeArgs)));
+    domArgs2.push_back(make_unique<FuncCall>("primed", std::move(pPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     auto post = make_unique<FuncCall>("not_in", std::move(notInArgs));
 
@@ -866,11 +924,12 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("sellerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("SELLER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: getSellerProducts(sellerEmail)
     vector<unique_ptr<Expr>> callArgs;
@@ -880,7 +939,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getSellerProductsOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -902,11 +961,12 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("sellerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("SELLER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: getSellerOrders(sellerEmail)
     vector<unique_ptr<Expr>> callArgs;
@@ -916,7 +976,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getSellerOrdersOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -939,9 +999,10 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     vector<unique_ptr<Expr>> roleIndexArgs;
     roleIndexArgs.push_back(make_unique<Var>("Roles"));
     roleIndexArgs.push_back(make_unique<Var>("sellerEmail"));
-    roleEqArgs.push_back(make_unique<FuncCall>("[]", std::move(roleIndexArgs)));
+    roleEqArgs.push_back(
+        make_unique<FuncCall>("get", std::move(roleIndexArgs)));
     roleEqArgs.push_back(make_unique<Var>("SELLER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(roleEqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(roleEqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("orderId"));
@@ -950,7 +1011,7 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: updateOrderStatus(sellerEmail, orderId, status)
     vector<unique_ptr<Expr>> callArgs;
@@ -967,11 +1028,11 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
     statusPrimeArgs.push_back(make_unique<Var>("OrderStatus"));
     vector<unique_ptr<Expr>> indexArgs2;
     indexArgs2.push_back(
-        make_unique<FuncCall>("'", std::move(statusPrimeArgs)));
+        make_unique<FuncCall>("primed", std::move(statusPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("orderId"));
-    postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    postEqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("status"));
-    auto post = make_unique<FuncCall>("=", std::move(postEqArgs));
+    auto post = make_unique<FuncCall>("equals", std::move(postEqArgs));
 
     blocks.push_back(make_unique<API>("updateOrderStatusOk", std::move(pre),
                                       std::move(call), std::move(post)));

@@ -1,6 +1,7 @@
 #include "../language/ast.hh"
 #include "../language/env.hh"
 #include "../language/printer.hh"
+#include "../language/typechecker.hh"
 #include "../see/ecommercefunctionfactory.hh"
 #include "../see/libraryfunctionfactory.hh"
 #include "../see/restaurantfunctionfactory.hh"
@@ -105,6 +106,9 @@ private:
     cout << "\n[Specification]" << endl;
     printer.visitSpec(*spec);
     SymbolTable *symbolTable = new SymbolTable(nullptr);
+    TypeChecker typeChecker;
+    typeChecker.visitSpec(*spec);
+    cout << "\n[Type Checking Passed]" << endl;
 
     auto factory = make_unique<Library::LibraryFunctionFactory>(backendUrl);
     Tester tester(factory.get());
@@ -212,6 +216,9 @@ private:
     cout << "\n[Specification]" << endl;
     printer.visitSpec(*spec);
     SymbolTable *symbolTable = new SymbolTable(nullptr);
+    TypeChecker typeChecker;
+    typeChecker.visitSpec(*spec);
+    cout << "\n[Type Checking Passed]" << endl;
 
     auto factory = make_unique<RestaurantFunctionFactory>(backendUrl);
     Tester tester(factory.get());

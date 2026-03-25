@@ -68,6 +68,7 @@ protected:
   void visitTuple(const Tuple &node) override;
 
   // Type expression visitor methods
+  void visitTypeVar(const TypeVar &node) override;
   void visitTypeConst(const TypeConst &node) override;
   void visitFuncType(const FuncType &node) override;
   void visitMapType(const MapType &node) override;
@@ -87,6 +88,7 @@ protected:
 public:
   // High-level visitor methods
   void visitDecl(const Decl &node) override;
+  void visitFuncDecl(const FuncDecl &node) override;
   void visitAPIcall(const APIcall &node) override;
   void visitAPI(const API &node) override;
   void visitResponse(const Response &node) override;

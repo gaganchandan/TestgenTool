@@ -135,6 +135,7 @@ private:
 
   // === REQUIRED VISITOR OVERRIDES (No-ops) ===
 
+  void visitTypeVar(const TypeVar &node) override {}
   void visitTypeConst(const TypeConst &) override {}
   void visitFuncType(const FuncType &) override {}
   void visitMapType(const MapType &) override {}
@@ -149,6 +150,7 @@ private:
   void visitTuple(const Tuple &) override {}
   void visitBool(const Bool &node) override;
   void visitDecl(const Decl &) override {}
+  void visitFuncDecl(const FuncDecl &) override {}
   void visitAPIcall(const APIcall &) override {}
   void visitAPI(const API &) override {}
   void visitResponse(const Response &) override {}

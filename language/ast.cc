@@ -31,6 +31,26 @@ std::unique_ptr<TypeExpr> TypeConst::clone() {
   return std::make_unique<TypeConst>(name);
 }
 
+// --- Type Variables ---
+TypeVar::TypeVar(std::string n) : TypeExpr(TypeExprType::TYPE_VAR), name(n) {}
+
+TypeVar::TypeVar(const TypeVar &other)
+    : TypeExpr(TypeExprType::TYPE_VAR), name(other.name) {}
+
+std::string TypeVar::toString() const { return "TYPE_VAR{" + name + "}"; }
+
+bool TypeVar::isEqual(const TypeExpr &other) const {
+  if (other.typeExprType != TypeExprType::TYPE_VAR) {
+    return false;
+  }
+  const TypeVar &otherVar = static_cast<const TypeVar &>(other);
+  return name == otherVar.name;
+}
+
+std::unique_ptr<TypeExpr> TypeVar::clone() {
+  return std::make_unique<TypeVar>(name);
+}
+
 // --- Function Types ---
 FuncType::FuncType(std::vector<std::unique_ptr<TypeExpr>> params,
                    std::unique_ptr<TypeExpr> returnType)

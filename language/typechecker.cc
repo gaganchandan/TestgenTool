@@ -411,14 +411,14 @@ void TypeChecker::instantiateAllFunctions() {
   }
 }
 
-void TypeChecker::addTypeDef(const TypeDef *typeDef) {
-  if (std::find(typeDefs.begin(), typeDefs.end(), typeDef->name) !=
-      typeDefs.end()) {
-    throw std::runtime_error("TypeError: duplicate definition of type: " +
-                             typeDef->name);
-  }
-  typeDefs.push_back(typeDef->name);
-}
+// void TypeChecker::addTypeDef(const TypeDef *typeDef) {
+//   if (std::find(typeDefs.begin(), typeDefs.end(), typeDef->name) !=
+//       typeDefs.end()) {
+//     throw std::runtime_error("TypeError: duplicate definition of type: " +
+//                              typeDef->name);
+//   }
+//   typeDefs.push_back(typeDef->name);
+// }
 
 void TypeChecker::addGlobal(const Decl *decl) {
   if (globals.find(decl->name) != globals.end()) {
@@ -433,8 +433,8 @@ void TypeChecker::addGlobal(const Decl *decl) {
   std::unordered_set<std::string> typeConsts;
   collectTypeConsts(decl->type.get(), typeConsts);
   for (const auto tc : typeConsts) {
-    if (std::find(typeDefs.begin(), typeDefs.end(), tc) == typeDefs.end())
-      throw std::runtime_error("TypeError: undefined type: " + tc);
+    // if (std::find(typeDefs.begin(), typeDefs.end(), tc) == typeDefs.end())
+    //   throw std::runtime_error("TypeError: undefined type: " + tc);
   }
 
   globals[decl->name] = decl->type.get();
@@ -456,8 +456,8 @@ void TypeChecker::addFunction(const FuncDecl *func) {
   }
   collectTypeConsts(func->returnType.second.get(), typeConsts);
   for (const auto tc : typeConsts) {
-    if (std::find(typeDefs.begin(), typeDefs.end(), tc) == typeDefs.end())
-      throw std::runtime_error("TypeError: undefined type: " + tc);
+    // if (std::find(typeDefs.begin(), typeDefs.end(), tc) == typeDefs.end())
+    //   throw std::runtime_error("TypeError: undefined type: " + tc);
   }
   std::vector<std::unique_ptr<TypeExpr>> paramClones;
   for (const auto &p : func->params)
@@ -715,7 +715,7 @@ void TypeChecker::visitFuncCall(const FuncCall &node) {
 //   currentTypeExpr = new TypeConst("bool");
 // }
 
-void TypeChecker::visitTypeDef(const TypeDef &node) { addTypeDef(&node); }
+// void TypeChecker::visitTypeDef(const TypeDef &node) { addTypeDef(&node); }
 
 void TypeChecker::visitDecl(const Decl &node) { addGlobal(&node); }
 
@@ -725,16 +725,17 @@ void TypeChecker::visitResponse(const Response &node) {
   visit(node.expr.get());
 }
 
-void TypeChecker::visitAPICall(const APIcall &node) { visit(node.call.get()); }
+void TypeChecker::visitAPIcall(const APIcall &node) { visit(node.call.get()); }
 
 void TypeChecker::visitAPI(const API &node) {
+  std::cout << "Visiting API: " << node.name << std::endl;
   if (node.pre)
     visit(node.pre.get());
   if (!(*currentTypeExpr == *new TypeConst("bool")))
     throw std::runtime_error(
         "TypeError: API pre-condition must be of type bool");
   if (node.call)
-    visitAPICall(*node.call);
+    visitAPIcall(*node.call);
   if (node.post)
     visit(node.post.get());
   if (!(*currentTypeExpr == *new TypeConst("bool")))
@@ -745,8 +746,8 @@ void TypeChecker::visitAPI(const API &node) {
 void TypeChecker::visitInit(const Init &node) { visit(node.expr.get()); }
 
 void TypeChecker::visitSpec(const Spec &node) {
-  for (const auto &typeDef : node.typeDefs)
-    addTypeDef(typeDef.get());
+  // for (const auto &typeDef : node.typeDefs)
+  //   addTypeDef(typeDef.get());
   for (const auto &g : node.globals)
     addGlobal(g.get());
   for (const auto &f : node.functions)

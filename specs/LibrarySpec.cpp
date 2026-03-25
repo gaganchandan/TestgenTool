@@ -51,7 +51,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
    * 3. FUNCTION DECLARATIONS (none)
    * ===================================================== */
 
-  vector<unique_ptr<APIFuncDecl>> functions;
+  vector<unique_ptr<FuncDecl>> functions;
 
   /* =====================================================
    * 4. API BLOCKS

@@ -7,6 +7,8 @@ void Visitor::visit(const TypeExpr *node) {
   if (!node)
     throw std::runtime_error("Null TypeExpr node in visitor");
   switch (node->typeExprType) {
+  case TypeExprType::TYPE_VAR:
+    visitTypeVar(*dynamic_cast<const TypeVar *>(node));
   case TypeExprType::TYPE_CONST:
     visitTypeConst(*dynamic_cast<const TypeConst *>(node));
     break;

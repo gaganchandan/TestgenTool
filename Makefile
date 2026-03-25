@@ -33,6 +33,7 @@ SRCS = test/test_libapplication.cpp \
        language/ast.cc \
        language/visitor.cc \
        language/printer.cc \
+	   language/typechecker.cc \
        language/rewrite_globals_visitor.cc \
        language/symvar.cc \
        language/env.cc \

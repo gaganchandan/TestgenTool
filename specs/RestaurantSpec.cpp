@@ -13,11 +13,13 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
    * ===================================================== */
 
   vector<unique_ptr<Decl>> globals;
+  // vector<string> typeDefs;
 
   auto mkString = []() { return make_unique<TypeConst>("string"); };
 
   auto mkRole = []() { return make_unique<TypeConst>("Role"); };
 
+  // typeDefs.push_back("Role");
   // User authentication & authorization
   globals.push_back(
       make_unique<Decl>("U", make_unique<MapType>(mkString(), mkString())));
@@ -63,7 +65,134 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
    * 3. FUNCTION DECLARATIONS (none)
    * ===================================================== */
 
-  vector<unique_ptr<APIFuncDecl>> functions;
+  vector<unique_ptr<FuncDecl>> functions;
+  // login: string -> string -> 'a
+  vector<unique_ptr<TypeExpr>> params;
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "login", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+  // registerCustomer: string -> string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "registerCustomer", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // browseRestaurants: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "browseRestaurants", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // viewMenu: string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "viewMenu", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // addToCart: string -> string -> int -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(make_unique<TypeConst>("int"));
+  functions.push_back(make_unique<FuncDecl>(
+      "addToCart", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // placeOrder: string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "placeOrder", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // leaveReview: string -> string -> string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "leaveReview", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // registerOwner: string -> string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "registerOwner", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // createRestaurant: string -> string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "createRestaurant", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // addMenuItem: string -> string -> string -> int -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(make_unique<TypeConst>("int"));
+  functions.push_back(make_unique<FuncDecl>(
+      "addMenuItem", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // assignOrder: string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "assignOrder", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // updateOrderStatusOwner: string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "updateOrderStatusOwner", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // registerAgent: string -> string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "registerAgent", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // updateOrderStatusAgent: string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "updateOrderStatusAgent", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
 
   /* =====================================================
    * 4. API BLOCKS
@@ -90,11 +219,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("U"));
     indexArgs.push_back(make_unique<Var>("customerEmail"));
-    neqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    neqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     neqArgs.push_back(make_unique<Var>("wrongPassword"));
-    preArgs.push_back(make_unique<FuncCall>("!=", std::move(neqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("not_equals", std::move(neqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: login(customerEmail, wrongPassword)
     vector<unique_ptr<Expr>> callArgs;
@@ -105,7 +234,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true (no state change, returns 401)
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("loginWrongPasswordErr", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -130,7 +259,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true (no state change, returns 401)
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("loginCustomerErr", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -172,9 +301,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs1.push_back(
         make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("customerEmail"));
-    eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
+    eq1Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("customerPassword"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq1Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq1Args)));
 
     vector<unique_ptr<Expr>> eq2Args;
     vector<unique_ptr<Expr>> rolesPrimeArgs;
@@ -183,11 +312,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs2.push_back(
         make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("customerEmail"));
-    eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eq2Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("CUSTOMER"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq2Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq2Args)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("registerCustomerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -209,11 +338,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("U"));
     indexArgs.push_back(make_unique<Var>("customerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("customerPassword"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: login(customerEmail, customerPassword)
     vector<unique_ptr<Expr>> callArgs;
@@ -231,9 +360,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs2.push_back(
         make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("customerEmail"));
-    postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    postEqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));
-    auto post = make_unique<FuncCall>("=", std::move(postEqArgs));
+    auto post = make_unique<FuncCall>("equals", std::move(postEqArgs));
 
     blocks.push_back(make_unique<API>("loginCustomerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -257,7 +386,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("browseRestaurantsOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -282,7 +411,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: viewMenu(customerEmail, restaurantId)
     vector<unique_ptr<Expr>> callArgs;
@@ -293,7 +422,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("viewMenuOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -318,7 +447,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: addToCart(customerEmail, menuItemId, quantity)
     vector<unique_ptr<Expr>> callArgs;
@@ -362,7 +491,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: placeOrder(customerEmail, deliveryAddress, paymentMethod)
     vector<unique_ptr<Expr>> callArgs;
@@ -396,7 +525,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs4)));
     postArgs.push_back(make_unique<FuncCall>("not_in", std::move(notInArgs)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("placeOrderOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -421,7 +550,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: leaveReview(customerEmail, orderId, restaurantRating,
     // deliveryRating, reviewComment)
@@ -485,9 +614,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs1.push_back(
         make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("ownerEmail"));
-    eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
+    eq1Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("ownerPassword"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq1Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq1Args)));
 
     vector<unique_ptr<Expr>> eq2Args;
     vector<unique_ptr<Expr>> rolesPrimeArgs;
@@ -496,11 +625,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs2.push_back(
         make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("ownerEmail"));
-    eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eq2Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("OWNER"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq2Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq2Args)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("registerOwnerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -522,11 +651,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("U"));
     indexArgs.push_back(make_unique<Var>("ownerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("ownerPassword"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: login(ownerEmail, ownerPassword)
     vector<unique_ptr<Expr>> callArgs;
@@ -544,9 +673,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs2.push_back(
         make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("ownerEmail"));
-    postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    postEqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));
-    auto post = make_unique<FuncCall>("=", std::move(postEqArgs));
+    auto post = make_unique<FuncCall>("equals", std::move(postEqArgs));
 
     blocks.push_back(make_unique<API>("loginOwnerOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -568,11 +697,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("Roles"));
     indexArgs.push_back(make_unique<Var>("ownerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("OWNER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: createRestaurant(ownerEmail, restaurantName, restaurantAddress,
     // restaurantContact)
@@ -604,11 +733,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs2.push_back(
         make_unique<FuncCall>("primed", std::move(ownersPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("_result"));
-    eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eq2Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("ownerEmail"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq2Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq2Args)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("createRestaurantOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -636,11 +765,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("Roles"));
     indexArgs.push_back(make_unique<Var>("customerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("OWNER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: createRestaurant(customerEmail, restaurantName, restaurantAddress,
     // restaurantContact)
@@ -654,7 +783,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true (should never reach here - precondition will fail)
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("createRestaurantCustomerErr",
                                       std::move(pre), std::move(call),
@@ -666,30 +795,35 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     // PRE: ownerEmail in dom(T) AND Roles[ownerEmail] = OWNER AND restaurantId
     // in dom(R)
     vector<unique_ptr<Expr>> preArgs;
+    vector<unique_ptr<Expr>> andArgs1;
 
     vector<unique_ptr<Expr>> inArgs1;
     inArgs1.push_back(make_unique<Var>("ownerEmail"));
     vector<unique_ptr<Expr>> domArgs1;
     domArgs1.push_back(make_unique<Var>("T"));
     inArgs1.push_back(make_unique<FuncCall>("dom", std::move(domArgs1)));
-    preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    // preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    andArgs1.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
 
     vector<unique_ptr<Expr>> eqArgs;
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("Roles"));
     indexArgs.push_back(make_unique<Var>("ownerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("OWNER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    // preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
+    andArgs1.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("restaurantId"));
     vector<unique_ptr<Expr>> domArgs2;
     domArgs2.push_back(make_unique<Var>("R"));
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
+
+    preArgs.push_back(make_unique<FuncCall>("and", std::move(andArgs1)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: addMenuItem(ownerEmail, restaurantId, itemName, itemPrice)
     vector<unique_ptr<Expr>> callArgs;
@@ -720,6 +854,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     // PRE: ownerEmail in dom(T) AND Roles[ownerEmail] = OWNER AND orderId in
     // dom(O) AND agentEmail in dom(U) AND Roles[agentEmail] = AGENT
     vector<unique_ptr<Expr>> preArgs;
+    vector<unique_ptr<Expr>> andArgs1;
+    vector<unique_ptr<Expr>> andArgs2;
+    vector<unique_ptr<Expr>> andArgs3;
 
     // ownerEmail in dom(T)
     vector<unique_ptr<Expr>> inArgs1;
@@ -727,16 +864,19 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> domArgs1;
     domArgs1.push_back(make_unique<Var>("T"));
     inArgs1.push_back(make_unique<FuncCall>("dom", std::move(domArgs1)));
-    preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    // preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
 
     // Roles[ownerEmail] = OWNER
     vector<unique_ptr<Expr>> eqArgs1;
     vector<unique_ptr<Expr>> indexArgs1;
     indexArgs1.push_back(make_unique<Var>("Roles"));
     indexArgs1.push_back(make_unique<Var>("ownerEmail"));
-    eqArgs1.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
+    eqArgs1.push_back(make_unique<FuncCall>("get", std::move(indexArgs1)));
     eqArgs1.push_back(make_unique<Var>("OWNER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs1)));
+    // preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs1)));
+
+    andArgs1.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    andArgs1.push_back(make_unique<FuncCall>("equals", std::move(eqArgs1)));
 
     // orderId in dom(O)
     vector<unique_ptr<Expr>> inArgs2;
@@ -744,7 +884,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> domArgs2;
     domArgs2.push_back(make_unique<Var>("O"));
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
-    preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
+    // preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
+    andArgs2.push_back(make_unique<FuncCall>("and", std::move(andArgs1)));
+    andArgs2.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
     // agentEmail in dom(U)
     vector<unique_ptr<Expr>> inArgs3;
@@ -752,18 +894,21 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> domArgs3;
     domArgs3.push_back(make_unique<Var>("U"));
     inArgs3.push_back(make_unique<FuncCall>("dom", std::move(domArgs3)));
-    preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs3)));
+    // preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs3)));
+    andArgs3.push_back(make_unique<FuncCall>("and", std::move(andArgs2)));
+    andArgs3.push_back(make_unique<FuncCall>("in", std::move(inArgs3)));
 
     // Roles[agentEmail] = AGENT
     vector<unique_ptr<Expr>> eqArgs2;
     vector<unique_ptr<Expr>> indexArgs2;
     indexArgs2.push_back(make_unique<Var>("Roles"));
     indexArgs2.push_back(make_unique<Var>("agentEmail"));
-    eqArgs2.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eqArgs2.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eqArgs2.push_back(make_unique<Var>("AGENT"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs2)));
+    preArgs.push_back(make_unique<FuncCall>("and", std::move(andArgs3)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: assignOrder(ownerEmail, orderId, agentEmail)
     vector<unique_ptr<Expr>> callArgs;
@@ -782,9 +927,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs3.push_back(
         make_unique<FuncCall>("primed", std::move(assignPrimeArgs)));
     indexArgs3.push_back(make_unique<Var>("orderId"));
-    postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs3)));
+    postEqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs3)));
     postEqArgs.push_back(make_unique<Var>("agentEmail"));
-    auto post = make_unique<FuncCall>("=", std::move(postEqArgs));
+    auto post = make_unique<FuncCall>("equals", std::move(postEqArgs));
 
     blocks.push_back(make_unique<API>("assignOrderOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -795,30 +940,34 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     // PRE: ownerEmail in dom(T) AND Roles[ownerEmail] = OWNER AND orderId in
     // dom(O)
     vector<unique_ptr<Expr>> preArgs;
+    vector<unique_ptr<Expr>> andArgs1;
 
     vector<unique_ptr<Expr>> inArgs1;
     inArgs1.push_back(make_unique<Var>("ownerEmail"));
     vector<unique_ptr<Expr>> domArgs1;
     domArgs1.push_back(make_unique<Var>("T"));
     inArgs1.push_back(make_unique<FuncCall>("dom", std::move(domArgs1)));
-    preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    // preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    andArgs1.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
 
     vector<unique_ptr<Expr>> eqArgs;
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("Roles"));
     indexArgs.push_back(make_unique<Var>("ownerEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("OWNER"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    // preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
+    andArgs1.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
     vector<unique_ptr<Expr>> inArgs2;
     inArgs2.push_back(make_unique<Var>("orderId"));
     vector<unique_ptr<Expr>> domArgs2;
     domArgs2.push_back(make_unique<Var>("O"));
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
+    preArgs.push_back(make_unique<FuncCall>("and", std::move(andArgs1)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: updateOrderStatusOwner(ownerEmail, orderId, orderStatus)
     vector<unique_ptr<Expr>> callArgs;
@@ -830,7 +979,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true (status updated)
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("updateOrderStatusOwnerOk",
                                       std::move(pre), std::move(call),
@@ -871,9 +1020,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs1.push_back(
         make_unique<FuncCall>("primed", std::move(uPrimeArgs)));
     indexArgs1.push_back(make_unique<Var>("agentEmail"));
-    eq1Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
+    eq1Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs1)));
     eq1Args.push_back(make_unique<Var>("agentPassword"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq1Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq1Args)));
 
     vector<unique_ptr<Expr>> eq2Args;
     vector<unique_ptr<Expr>> rolesPrimeArgs;
@@ -882,11 +1031,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs2.push_back(
         make_unique<FuncCall>("primed", std::move(rolesPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("agentEmail"));
-    eq2Args.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eq2Args.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eq2Args.push_back(make_unique<Var>("AGENT"));
-    postArgs.push_back(make_unique<FuncCall>("=", std::move(eq2Args)));
+    postArgs.push_back(make_unique<FuncCall>("equals", std::move(eq2Args)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("registerAgentOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -908,11 +1057,11 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> indexArgs;
     indexArgs.push_back(make_unique<Var>("U"));
     indexArgs.push_back(make_unique<Var>("agentEmail"));
-    eqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs)));
+    eqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs)));
     eqArgs.push_back(make_unique<Var>("agentPassword"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: login(agentEmail, agentPassword)
     vector<unique_ptr<Expr>> callArgs;
@@ -930,9 +1079,9 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     indexArgs2.push_back(
         make_unique<FuncCall>("primed", std::move(tPrimeArgs)));
     indexArgs2.push_back(make_unique<Var>("agentEmail"));
-    postEqArgs.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    postEqArgs.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     postEqArgs.push_back(make_unique<Var>("_result"));
-    auto post = make_unique<FuncCall>("=", std::move(postEqArgs));
+    auto post = make_unique<FuncCall>("equals", std::move(postEqArgs));
 
     blocks.push_back(make_unique<API>("loginAgentOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -943,6 +1092,8 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     // PRE: agentEmail in dom(T) AND Roles[agentEmail] = AGENT AND orderId in
     // dom(Assignments) AND Assignments[orderId] = agentEmail
     vector<unique_ptr<Expr>> preArgs;
+    vector<unique_ptr<Expr>> andArgs1;
+    vector<unique_ptr<Expr>> andArgs2;
 
     // agentEmail in dom(T)
     vector<unique_ptr<Expr>> inArgs1;
@@ -950,16 +1101,18 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> domArgs1;
     domArgs1.push_back(make_unique<Var>("T"));
     inArgs1.push_back(make_unique<FuncCall>("dom", std::move(domArgs1)));
-    preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    // preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
+    andArgs1.push_back(make_unique<FuncCall>("in", std::move(inArgs1)));
 
     // Roles[agentEmail] = AGENT
     vector<unique_ptr<Expr>> eqArgs1;
     vector<unique_ptr<Expr>> indexArgs1;
     indexArgs1.push_back(make_unique<Var>("Roles"));
     indexArgs1.push_back(make_unique<Var>("agentEmail"));
-    eqArgs1.push_back(make_unique<FuncCall>("[]", std::move(indexArgs1)));
+    eqArgs1.push_back(make_unique<FuncCall>("get", std::move(indexArgs1)));
     eqArgs1.push_back(make_unique<Var>("AGENT"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs1)));
+    // preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs1)));
+    andArgs1.push_back(make_unique<FuncCall>("equals", std::move(eqArgs1)));
 
     // orderId in dom(Assignments)
     vector<unique_ptr<Expr>> inArgs2;
@@ -967,18 +1120,21 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
     vector<unique_ptr<Expr>> domArgs2;
     domArgs2.push_back(make_unique<Var>("Assignments"));
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
-    preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
+    // preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
+    andArgs2.push_back(make_unique<FuncCall>("and", std::move(andArgs1)));
+    andArgs2.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
     // Assignments[orderId] = agentEmail (agent is assigned to this order)
     vector<unique_ptr<Expr>> eqArgs2;
     vector<unique_ptr<Expr>> indexArgs2;
     indexArgs2.push_back(make_unique<Var>("Assignments"));
     indexArgs2.push_back(make_unique<Var>("orderId"));
-    eqArgs2.push_back(make_unique<FuncCall>("[]", std::move(indexArgs2)));
+    eqArgs2.push_back(make_unique<FuncCall>("get", std::move(indexArgs2)));
     eqArgs2.push_back(make_unique<Var>("agentEmail"));
-    preArgs.push_back(make_unique<FuncCall>("=", std::move(eqArgs2)));
+    preArgs.push_back(make_unique<FuncCall>("and", std::move(andArgs2)));
+    preArgs.push_back(make_unique<FuncCall>("equals", std::move(eqArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: updateOrderStatusAgent(agentEmail, orderId, orderStatus)
     vector<unique_ptr<Expr>> callArgs;
@@ -990,7 +1146,7 @@ std::unique_ptr<Spec> makeRestaurantSpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true (status updated)
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("updateOrderStatusAgentOk",
                                       std::move(pre), std::move(call),

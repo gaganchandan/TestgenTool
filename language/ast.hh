@@ -34,6 +34,7 @@ enum class ExprType {
 
 enum class TypeExprType {
   TYPE_CONST,
+  TYPE_VAR,
   FUNC_TYPE,
   MAP_TYPE,
   SET_TYPE,
@@ -78,6 +79,20 @@ public:
   virtual std::string toString() const override;
   virtual std::unique_ptr<TypeExpr> clone() override;
   virtual bool isEqual(const TypeExpr &other) const override;
+};
+
+// --- Type Variables ---
+class TypeVar : public TypeExpr {
+public:
+  const std::string name;
+
+public:
+  TypeVar(std::string name);
+  TypeVar(const TypeVar &other);
+  virtual std::string toString() const;
+  virtual std::unique_ptr<TypeExpr> clone();
+  virtual bool isEqual(const TypeExpr &other) const;
+  std::size_t operator()(const TypeVar &tv) const;
 };
 
 // --- Function Types ---

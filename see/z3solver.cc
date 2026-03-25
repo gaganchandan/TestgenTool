@@ -743,6 +743,10 @@ void Z3InputMaker::visitTuple(const Tuple &node) {
 // Type Expression Visitors (not used for Z3 conversion directly)
 // ============================================================================
 
+void Z3InputMaker::visitTypeVar(const TypeVar &node) {
+  throw runtime_error("TypeVar not supported in Z3 conversion");
+}
+
 void Z3InputMaker::visitTypeConst(const TypeConst &node) {
   throw runtime_error("TypeConst not supported in Z3 conversion");
 }
@@ -769,6 +773,10 @@ void Z3InputMaker::visitSetType(const SetType &node) {
 
 void Z3InputMaker::visitDecl(const Decl &node) {
   throw runtime_error("Decl not supported in Z3 conversion");
+}
+
+void Z3InputMaker::visitFuncDecl(const FuncDecl &node) {
+  throw runtime_error("FuncDecl not supported in Z3 conversion");
 }
 
 void Z3InputMaker::visitAPIcall(const APIcall &node) {
