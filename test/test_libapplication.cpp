@@ -1148,7 +1148,7 @@ int main() {
 
     // RUN ALL 25 TESTS (comment out for selective testing)
     cout << "\n=== DEPTH TESTS ===" << endl; // for restaurant
-    // RestaurantTests::test01_registerLogin(executor);
+    RestaurantTests::test01_registerLogin(executor);
     // RestaurantTests::test02_loginFailure(executor);
     // RestaurantTests::test03_browseOnly(executor);
 
@@ -1183,7 +1183,7 @@ int main() {
     // RestaurantTests::test22_complexOrderManagement(executor);
     // RestaurantTests::test23_invalidSequence(executor);
     // RestaurantTests::test24_deepWorkflow(executor);
-    RestaurantTests::test25_registerCustomerDuplicate(executor);
+    // RestaurantTests::test25_registerCustomerDuplicate(executor);
 
     // ========================================
     // E-COMMERCE TESTS

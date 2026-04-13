@@ -130,6 +130,14 @@ z3::sort Z3InputMaker::typeExprToSort(TypeExpr *type) {
     z3::sort valSort = typeExprToSort(mt->range.get());
     return getMapSort(keySort, valSort);
   }
+  case TypeExprType::TUPLE_TYPE: {
+    TupleType *tt = dynamic_cast<TupleType *>(type);
+    std::vector<z3::sort> elementSorts;
+    for (auto &elemType : tt->elements) {
+      elementSorts.push_back(typeExprToSort(elemType.get()));
+    }
+    return getTupleSort(elementSorts);
+  }
   default:
     return ctx.int_sort();
   }
