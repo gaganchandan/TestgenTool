@@ -352,7 +352,7 @@ Expr *generateRealisticValue(const string &varName, int index) {
   }
 }
 
-void Tester::generateTest() {}
+void TestGen::generateTest() {}
 
 bool isInputStmt(const Stmt &stmt) {
   if (stmt.statementType == StmtType::ASSIGN) {
@@ -410,7 +410,7 @@ bool needsSigmaLookup(const string &baseName) {
 
 // Search sigma for the LATEST non-empty map with given prefix and return first
 // key
-string Tester::findKeyFromMapInSigma(const string &prefix) {
+string TestGen::findKeyFromMapInSigma(const string &prefix) {
   cout << "    [findKeyFromMapInSigma] Searching for prefix: " << prefix
        << endl;
 
@@ -444,10 +444,10 @@ string Tester::findKeyFromMapInSigma(const string &prefix) {
 }
 
 // Generate value for a variable based on its base name
-Expr *Tester::generateValueForBaseName(const string &baseName,
-                                       const string &varName, int index,
-                                       map<string, Expr *> &baseNameToValue,
-                                       bool lookupFromSigma) {
+Expr *TestGen::generateValueForBaseName(const string &baseName,
+                                        const string &varName, int index,
+                                        map<string, Expr *> &baseNameToValue,
+                                        bool lookupFromSigma) {
   Expr *value = nullptr;
 
   // OWNER ROLE VARIABLES
@@ -832,7 +832,7 @@ bool hasUnresolvedPlaceholders(const Program &prog) {
 // IMPORTANT: Only resolve if value is available, otherwise KEEP the placeholder
 void resolvePlaceholdersInPlace(vector<Expr *> &concreteVals,
                                 const vector<string> &varNames,
-                                Tester *tester) {
+                                TestGen *tester) {
   for (size_t i = 0; i < concreteVals.size(); i++) {
     if (concreteVals[i]->exprType != ExprType::STRING)
       continue;
@@ -962,7 +962,7 @@ void resolvePlaceholdersInPlace(vector<Expr *> &concreteVals,
 
 // Resolve placeholders in the program AST itself (for statements that already
 // have placeholder values)
-void resolvePlaceholdersInProgram(Program &prog, Tester *tester) {
+void resolvePlaceholdersInProgram(Program &prog, TestGen *tester) {
   cout << "\n>>> Resolving placeholders in program AST" << endl;
 
   // We need to modify the statements vector, but it's const
@@ -1085,9 +1085,9 @@ bool isPathConstraintUnsat(SEE &see, const std::vector<std::string> &sequence) {
             << std::endl;
   return isSequenceTrulyUnsat(sequence);
 }
-unique_ptr<Program> Tester::generateCTC(unique_ptr<Program> atc,
-                                        vector<Expr *> ConcreteVals,
-                                        ValueEnvironment *ve) {
+unique_ptr<Program> TestGen::generateCTC(unique_ptr<Program> atc,
+                                         vector<Expr *> ConcreteVals,
+                                         ValueEnvironment *ve) {
   cout << "\n========================================" << endl;
   cout << ">>> generateCTC: Starting iteration" << endl;
   cout << "========================================" << endl;
@@ -1265,12 +1265,12 @@ unique_ptr<Program> Tester::generateCTC(unique_ptr<Program> atc,
   return generateCTC(std::move(rewritten), newConcreteVals, ve);
 }
 
-unique_ptr<Program> Tester::generateATC(unique_ptr<Spec> spec,
-                                        vector<string> ts) {
+unique_ptr<Program> TestGen::generateATC(unique_ptr<Spec> spec,
+                                         vector<string> ts) {
   // Store the API sequence for later use in UNSAT detection
   currentApiSequence = ts;
 
-  Program raw = genATC(*spec, ts);
+  Program raw = genATCFromString(*spec, ts);
 
   auto &mutable_stmts = const_cast<vector<unique_ptr<Stmt>> &>(raw.statements);
   auto logicalATC = unique_ptr<Program>(new Program(std::move(mutable_stmts)));
@@ -1288,8 +1288,8 @@ unique_ptr<Program> Tester::generateATC(unique_ptr<Spec> spec,
   return testApiATC;
 }
 
-unique_ptr<Program> Tester::rewriteATC(unique_ptr<Program> &atc,
-                                       vector<Expr *> ConcreteVals) {
+unique_ptr<Program> TestGen::rewriteATC(unique_ptr<Program> &atc,
+                                        vector<Expr *> ConcreteVals) {
   if (atc->statements.size() == 0 && ConcreteVals.size() != 0) {
     throw runtime_error("Empty test case but concrete values provided");
   }

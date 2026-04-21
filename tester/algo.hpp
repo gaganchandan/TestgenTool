@@ -54,5 +54,4 @@ unique_ptr<Expr> replaceResultVar(unique_ptr<Expr> expr, const string &oldName,
 // Build ATC from a resolved sequence of API blocks
 Program buildATCFromBlockSequence(const vector<const API *> &blockSeq);
 
-// Main entry point: Spec + test string → ATC
-Program genATC(const Spec &spec, const vector<string> &testString);
+Program genATCFromString(const Spec &spec, const vector<string> &testString);

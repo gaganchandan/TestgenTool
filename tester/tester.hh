@@ -1,5 +1,4 @@
-#ifndef TESTER_HH
-#define TESTER_HH
+#pragma once
 
 #include "../language/ast.hh"
 #include "../language/env.hh"
@@ -12,7 +11,7 @@
 
 using namespace std;
 
-class Tester {
+class TestGen {
 private:
   SEE see;
   Z3Solver solver;
@@ -21,7 +20,7 @@ private:
 
 public:
   // Constructor
-  Tester(FunctionFactory *functionFactory)
+  TestGen(FunctionFactory *functionFactory)
       : see(functionFactory), solver(), pathConstraints() {}
 
   // Main test generation methods
@@ -46,5 +45,3 @@ public:
   vector<Expr *> &getPathConstraints() { return pathConstraints; }
   const vector<string> &getApiSequence() const { return currentApiSequence; }
 };
-
-#endif

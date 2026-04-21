@@ -89,14 +89,14 @@ private:
   }
 
   void runOriginal(unique_ptr<Spec> spec, const vector<string> &ts) {
-    Program atc = genATC(*spec, ts);
+    Program atc = genATCFromString(*spec, ts);
     Printer printer;
     printer.visitProgram(atc);
   }
 
   void runRewriteOnly(unique_ptr<Spec> spec, const vector<string> &ts) {
     auto factory = make_unique<Library::LibraryFunctionFactory>(backendUrl);
-    Tester tester(factory.get());
+    TestGen tester(factory.get());
 
     unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
   }
@@ -111,7 +111,7 @@ private:
     cout << "\n[Type Checking Passed]" << endl;
 
     auto factory = make_unique<Library::LibraryFunctionFactory>(backendUrl);
-    Tester tester(factory.get());
+    TestGen tester(factory.get());
 
     unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
 
@@ -199,14 +199,14 @@ private:
   }
 
   void runOriginal(unique_ptr<Spec> spec, const vector<string> &ts) {
-    Program atc = genATC(*spec, ts);
+    Program atc = genATCFromString(*spec, ts);
     Printer printer;
     printer.visitProgram(atc);
   }
 
   void runRewriteOnly(unique_ptr<Spec> spec, const vector<string> &ts) {
     auto factory = make_unique<RestaurantFunctionFactory>(backendUrl);
-    Tester tester(factory.get());
+    TestGen tester(factory.get());
 
     unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
   }
@@ -221,7 +221,7 @@ private:
     cout << "\n[Type Checking Passed]" << endl;
 
     auto factory = make_unique<RestaurantFunctionFactory>(backendUrl);
-    Tester tester(factory.get());
+    TestGen tester(factory.get());
 
     unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
 
@@ -308,14 +308,14 @@ private:
   }
 
   void runOriginal(unique_ptr<Spec> spec, const vector<string> &ts) {
-    Program atc = genATC(*spec, ts);
+    Program atc = genATCFromString(*spec, ts);
     Printer printer;
     printer.visitProgram(atc);
   }
 
   void runRewriteOnly(unique_ptr<Spec> spec, const vector<string> &ts) {
     auto factory = make_unique<Ecommerce::EcommerceFunctionFactory>(backendUrl);
-    Tester tester(factory.get());
+    TestGen tester(factory.get());
 
     unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
   }
@@ -324,7 +324,7 @@ private:
     SymbolTable *symbolTable = new SymbolTable(nullptr);
 
     auto factory = make_unique<Ecommerce::EcommerceFunctionFactory>(backendUrl);
-    Tester tester(factory.get());
+    TestGen tester(factory.get());
 
     unique_ptr<Program> testApiATC = tester.generateATC(std::move(spec), ts);
 

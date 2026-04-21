@@ -355,7 +355,7 @@ Program buildATCFromBlockSequence(const vector<const API *> &blockSeq) {
  * genATC
  * ============================================================ */
 
-Program genATC(const Spec &spec, const vector<string> &testString) {
+Program genATCFromString(const Spec &spec, const vector<string> &testString) {
   vector<const API *> blocks;
 
   for (const auto &name : testString) {
