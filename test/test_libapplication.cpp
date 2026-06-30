@@ -141,13 +141,14 @@ private:
 // TEST EXECUTOR
 // ============================================
 
-class TestExecutor {
+class RestaurantTestExecutor {
 private:
   TestMode mode;
   string backendUrl;
 
 public:
-  TestExecutor(TestMode m, const string &url = "http://localhost:5002")
+  RestaurantTestExecutor(TestMode m,
+                         const string &url = "http://localhost:5002")
       : mode(m), backendUrl(url) {}
 
   void runTest(const string &testName, unique_ptr<Spec> spec,
@@ -361,20 +362,20 @@ namespace RestaurantTests {
 // DEPTH 1: Single API Call Tests
 // ========================================
 
-void test01_registerLogin(TestExecutor &executor) {
+void test01_registerLogin(RestaurantTestExecutor &executor) {
   executor.runTest("Test 01: Register Customer-->Login (Depth=2)",
                    makeRestaurantSpec(),
                    {"registerCustomerOk", "loginCustomerOk"});
 }
 
-void test02_loginFailure(TestExecutor &executor) {
+void test02_loginFailure(RestaurantTestExecutor &executor) {
   executor.runTest("Test 02: loginCustomerErr (Depth=1)", makeRestaurantSpec(),
                    {"loginCustomerErr"}
                    // {"loginCustomerOk"} // Should fail: user not in U
   );
 }
 
-void test03_browseOnly(TestExecutor &executor) {
+void test03_browseOnly(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 03: registerCustomerOk → loginWrongPasswordErr (Depth=2)",
       makeRestaurantSpec(), {"registerCustomerOk", "loginWrongPasswordErr"}
@@ -386,14 +387,14 @@ void test03_browseOnly(TestExecutor &executor) {
 // DEPTH 2: Two API Call Tests
 // ========================================
 
-void test04_Login(TestExecutor &executor) {
+void test04_Login(RestaurantTestExecutor &executor) {
   executor.runTest("Test 04: loginCustomerOk (Depth=1, Expected UNSAT)",
                    makeRestaurantSpec(),
                    {"loginCustomerOk"} // {"loginOk"} // should be UNSAT
   );
 }
 
-void test05_registerOwnerAndLogin(TestExecutor &executor) {
+void test05_registerOwnerAndLogin(RestaurantTestExecutor &executor) {
   executor.runTest("Test 05: registerCustomerOk → loginCustomerOk → "
                    "addToCartRestaurantOk (Depth=3, Expected UNSAT)",
                    makeRestaurantSpec(),
@@ -403,7 +404,7 @@ void test05_registerOwnerAndLogin(TestExecutor &executor) {
   );
 }
 
-void test06_registerAgentAndLogin(TestExecutor &executor) {
+void test06_registerAgentAndLogin(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 06: registerOwnerOk → loginOwnerOk → createRestaurantOk → "
       "placeOrderOk (Depth=4, Expected UNSAT)",
@@ -417,7 +418,7 @@ void test06_registerAgentAndLogin(TestExecutor &executor) {
 // DEPTH 4: Three API Call Tests
 // ========================================
 
-void test07_loginBrowseView(TestExecutor &executor) {
+void test07_loginBrowseView(RestaurantTestExecutor &executor) {
   executor.runTest("Test 07: registerOwnerOk → loginOwnerOk → "
                    "createRestaurantOk → registerCustomerOk → loginCustomerOk "
                    "→ browseRestaurantsOk → viewMenuOk (Depth=7)",
@@ -432,7 +433,7 @@ void test07_loginBrowseView(TestExecutor &executor) {
   );
 }
 
-void test08_loginAndAddToCart(TestExecutor &executor) {
+void test08_loginAndAddToCart(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 08: registerOwnerOk → loginOwnerOk → createRestaurantOk → "
       "addMenuItemOk → registerCustomerOk → loginCustomerOk → "
@@ -450,7 +451,7 @@ void test08_loginAndAddToCart(TestExecutor &executor) {
   );
 }
 
-void test09_loginAndReview(TestExecutor &executor) {
+void test09_loginAndReview(RestaurantTestExecutor &executor) {
   executor.runTest("Test 09: registerOwnerOk → loginOwnerOk → "
                    "createRestaurantOk → addMenuItemOk → registerCustomerOk → "
                    "loginCustomerOk → browseRestaurantsOk → viewMenuOk → "
@@ -467,7 +468,7 @@ void test09_loginAndReview(TestExecutor &executor) {
                     "addToCartRestaurantOk", "placeOrderOk"});
 }
 
-void test10_reviewWithoutLogin(TestExecutor &executor) {
+void test10_reviewWithoutLogin(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 10: Full Order Lifecycle with Review (Depth=19)",
       makeRestaurantSpec(),
@@ -493,7 +494,7 @@ void test10_reviewWithoutLogin(TestExecutor &executor) {
        "leaveReviewOk"});
 }
 
-void test11_fullCustomerOrder(TestExecutor &executor) {
+void test11_fullCustomerOrder(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 11: registerOwnerOk → loginOwnerOk → createRestaurantOk (Depth=3)",
       makeRestaurantSpec(),
@@ -503,7 +504,7 @@ void test11_fullCustomerOrder(TestExecutor &executor) {
   );
 }
 
-void test12_ownerCreateRestaurant(TestExecutor &executor) {
+void test12_ownerCreateRestaurant(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 12: registerOwnerOk → loginOwnerOk → createRestaurantOk → "
       "addMenuItemOk → addMenuItemOk → addMenuItemOk (Depth=6)",
@@ -514,7 +515,7 @@ void test12_ownerCreateRestaurant(TestExecutor &executor) {
   );
 }
 
-void test13_cartWithoutItems(TestExecutor &executor) {
+void test13_cartWithoutItems(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 13: registerOwnerOk → loginOwnerOk → createRestaurantOk → "
       "addMenuItemOk → registerCustomerOk → loginCustomerOk → "
@@ -532,7 +533,7 @@ void test13_cartWithoutItems(TestExecutor &executor) {
 // DEPTH 5: Five API Call Tests
 // ========================================
 
-void test14_customerFullWorkflow(TestExecutor &executor) {
+void test14_customerFullWorkflow(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 14: registerOwnerOk → loginOwnerOk → createRestaurantOk → "
       "addMenuItemOk → registerCustomerOk → loginCustomerOk → "
@@ -547,7 +548,7 @@ void test14_customerFullWorkflow(TestExecutor &executor) {
   );
 }
 
-void test15_ownerFullSetup(TestExecutor &executor) {
+void test15_ownerFullSetup(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 15: registerOwnerOk → loginOwnerOk → createRestaurantOk → "
       "addMenuItemOk → registerCustomerOk → loginCustomerOk → "
@@ -565,7 +566,7 @@ void test15_ownerFullSetup(TestExecutor &executor) {
   );
 }
 
-void test16_agentAssignOrder(TestExecutor &executor) {
+void test16_agentAssignOrder(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 16: registerCustomerOk → registerCustomerOk (Depth=2, Expected "
       "UNSAT - Duplicate Registration)",
@@ -579,7 +580,7 @@ void test16_agentAssignOrder(TestExecutor &executor) {
 // DEPTH 6: Six API Call Tests
 // ========================================
 
-void test17_ownerManageOrder(TestExecutor &executor) {
+void test17_ownerManageOrder(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 17: registerOwnerOk → loginOwnerOk → createRestaurantOk → "
       "addMenuItemOk → registerCustomerOk → loginCustomerOk → "
@@ -596,7 +597,7 @@ void test17_ownerManageOrder(TestExecutor &executor) {
   );
 }
 
-void test18_multipleCartAdditions(TestExecutor &executor) {
+void test18_multipleCartAdditions(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 18: loginCustomerOk → browseRestaurantsOk → addToCartRestaurantOk "
       "x3 → placeOrderOk (Depth=6, Expected UNSAT - No Registration)",
@@ -607,7 +608,7 @@ void test18_multipleCartAdditions(TestExecutor &executor) {
   );
 }
 
-void test19_wrongRoleAccess(TestExecutor &executor) {
+void test19_wrongRoleAccess(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 19: registerCustomerOk → loginCustomerOk → "
       "createRestaurantCustomerErr (Depth=3, Expected UNSAT - Customer Can't "
@@ -620,7 +621,7 @@ void test19_wrongRoleAccess(TestExecutor &executor) {
 // DEPTH 7: Seven API Call Tests
 // ========================================
 
-void test20_fullLifecycle(TestExecutor &executor) {
+void test20_fullLifecycle(RestaurantTestExecutor &executor) {
   executor.runTest("Test 20: registerCustomerOk → loginCustomerOk → "
                    "browseRestaurantsOk → viewMenuOk → addToCartRestaurantOk → "
                    "placeOrderOk → leaveReviewOk (Depth=7, Expected UNSAT)",
@@ -630,7 +631,7 @@ void test20_fullLifecycle(TestExecutor &executor) {
                     "addToCartRestaurantOk", "placeOrderOk", "leaveReviewOk"});
 }
 
-void test21_ownerCompleteFlow(TestExecutor &executor) {
+void test21_ownerCompleteFlow(RestaurantTestExecutor &executor) {
   executor.runTest("Test 21: registerOwnerOk → loginOwnerOk → "
                    "createRestaurantOk → addMenuItemOk x3 (Depth=6)",
                    makeRestaurantSpec(),
@@ -638,7 +639,7 @@ void test21_ownerCompleteFlow(TestExecutor &executor) {
                     "addMenuItemOk", "addMenuItemOk", "addMenuItemOk"});
 }
 
-void test22_complexOrderManagement(TestExecutor &executor) {
+void test22_complexOrderManagement(RestaurantTestExecutor &executor) {
   executor.runTest("Test 23: registerOwnerOk → loginOwnerOk → "
                    "createRestaurantOk → addMenuItemOk → registerCustomerOk → "
                    "loginCustomerOk → browseRestaurantsOk → viewMenuOk → "
@@ -656,7 +657,7 @@ void test22_complexOrderManagement(TestExecutor &executor) {
                     "placeOrderOk"});
 }
 
-void test23_invalidSequence(TestExecutor &executor) {
+void test23_invalidSequence(RestaurantTestExecutor &executor) {
   executor.runTest(
       "Test 24: registerCustomerOk → loginCustomerOk → leaveReviewOk (Depth=3, "
       "Expected UNSAT - Review Before Order)",
@@ -666,7 +667,7 @@ void test23_invalidSequence(TestExecutor &executor) {
   );
 }
 
-void test24_deepWorkflow(TestExecutor &executor) {
+void test24_deepWorkflow(RestaurantTestExecutor &executor) {
   executor.runTest("Test 25: registerOwnerOk → loginOwnerOk → "
                    "createRestaurantOk → addMenuItemOk x5 → "
                    "updateOrderStatusOwnerOk x2 (Depth=10, Expected UNSAT)",
@@ -677,7 +678,7 @@ void test24_deepWorkflow(TestExecutor &executor) {
                     "updateOrderStatusOwnerOk", "updateOrderStatusOwnerOk"});
 }
 
-void test25_registerCustomerDuplicate(TestExecutor &executor) {
+void test25_registerCustomerDuplicate(RestaurantTestExecutor &executor) {
   executor.runTest("Test 26: registerCustomerOk → registerCustomerOk (Depth=2, "
                    "Expected UNSAT - Duplicate Email)",
                    makeRestaurantSpec(),
@@ -1129,9 +1130,9 @@ int main() {
     TestMode mode = TestMode::FULL_PIPELINE; // Needs backend running!
 
     // Backend URL (only used for FULL_PIPELINE mode)
-    string backendUrl = "http://localhost:5002"; // for restaurant
+    // string backendUrl = "http://localhost:5002"; // for restaurant
 
-    TestExecutor executor(mode, backendUrl); // for restaurant
+    // RestaurantTestExecutor executor(mode, backendUrl); // for restaurant
 
     // ========================================
     // RUN TESTS
@@ -1148,7 +1149,7 @@ int main() {
 
     // RUN ALL 25 TESTS (comment out for selective testing)
     cout << "\n=== DEPTH TESTS ===" << endl; // for restaurant
-    RestaurantTests::test01_registerLogin(executor);
+    // RestaurantTests::test01_registerLogin(executor);
     // RestaurantTests::test02_loginFailure(executor);
     // RestaurantTests::test03_browseOnly(executor);
 
@@ -1197,9 +1198,8 @@ int main() {
     //      << endl; //uncomment for ecom
 
     // E-commerce backend URL
-    // string ecommerceBackendUrl = "http://localhost:3000"; //uncomment for
-    // ecom EcommerceTestExecutor ecommerceExecutor(mode, ecommerceBackendUrl);
-    // //uncomment for ecom
+    string ecommerceBackendUrl = "http://localhost:3000";
+    EcommerceTestExecutor ecommerceExecutor(mode, ecommerceBackendUrl);
 
     // === SAT TESTS ===
     // EcommerceTests::test01_registerBuyer(ecommerceExecutor);
@@ -1245,9 +1245,9 @@ int main() {
     // TestMode mode = TestMode::FULL_PIPELINE; // Needs backend running!
 
     // Backend URL - Spring Boot default port
-    // string backendUrl = "http://localhost:8080";
+    string backendUrl = "http://localhost:8080";
 
-    // LibraryTestExecutor executor(mode, backendUrl);
+    LibraryTestExecutor executor(mode, backendUrl);
 
     // ========================================
     // RUN TESTS
@@ -1268,7 +1268,7 @@ int main() {
 
     // ========== DEPTH 2 TESTS ==========
     // cout << "\n=== DEPTH 2 TESTS ===" << endl;
-    // LibraryTests::test05_saveAndGetBook(executor);
+    LibraryTests::test05_saveAndGetBook(executor);
     // LibraryTests::test06_saveAndGetStudent(executor);
     // LibraryTests::test07_saveBookTwice(executor);
     // LibraryTests::test08_getBookNotFound(executor);

@@ -106,6 +106,118 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
 
   // updateCart: string -> string -> int -> 'a
   params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(make_unique<TypeConst>("int"));
+  functions.push_back(make_unique<FuncDecl>(
+      "updateCart", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // createOrder: string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "createOrder", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getBuyerOrders: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getBuyerOrders", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // createReview: string -> string -> string -> int -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(make_unique<TypeConst>("int"));
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "createReview", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getProductReviews: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+
+  // registerSeller: string -> string -> string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "registerSeller", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // loginSeller: string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "loginSeller", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // createProduct: string -> string -> string -> string -> string -> int -> int
+  // -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(make_unique<TypeConst>("int"));
+  params.push_back(make_unique<TypeConst>("int"));
+  functions.push_back(make_unique<FuncDecl>(
+      "createProduct", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // updateProduct: string -> string -> string -> string -> int -> int -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(make_unique<TypeConst>("int"));
+  params.push_back(make_unique<TypeConst>("int"));
+  functions.push_back(make_unique<FuncDecl>(
+      "updateProduct", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // deleteProduct: string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "deleteProduct", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getSellerProducts: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getSellerProducts", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getSellerOrders: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getSellerOrders", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // updateOrderStatus: string -> string -> string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "updateOrderStatus", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
 
   /* =====================================================
    * 4. API BLOCKS
@@ -1045,3 +1157,4 @@ std::unique_ptr<Spec> makeEcommerceSpec() {
   return make_unique<Spec>(std::move(globals), std::move(init),
                            std::move(functions), std::move(blocks));
 }
+#include "EcommerceSpec.hpp"

@@ -52,6 +52,168 @@ std::unique_ptr<Spec> makeLibrarySpec() {
    * ===================================================== */
 
   vector<unique_ptr<FuncDecl>> functions;
+  vector<unique_ptr<TypeExpr>> params;
+
+  // getAllBooks: 'a
+  params.clear();
+  functions.push_back(make_unique<FuncDecl>(
+      "getAllBooks", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getBookByCode: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getBookByCode", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getBookByCodeErr: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(
+      make_unique<FuncDecl>("getBookByCodeErr", std::move(params),
+                            std::make_pair(HTTPResponseCode::BAD_REQUEST_400,
+                                           make_unique<TypeVar>("a"))));
+
+  // saveBook: string, string, string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "saveBook", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // updateBook: string, string, string, string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "updateBook", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // deleteBook: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "deleteBook", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getAllStudents: 'a
+  params.clear();
+  functions.push_back(make_unique<FuncDecl>(
+      "getAllStudents", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getStudentById: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getStudentById", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getStudentByIdErr: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(
+      make_unique<FuncDecl>("getStudentByIdErr", std::move(params),
+                            std::make_pair(HTTPResponseCode::BAD_REQUEST_400,
+                                           make_unique<TypeVar>("a"))));
+
+  // saveStudent: string, string, string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "saveStudent", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // updateStudent: string, string, string, string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "updateStudent", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // deleteStudent: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "deleteStudent", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getAllRequests: 'a
+  params.clear();
+  functions.push_back(make_unique<FuncDecl>(
+      "getAllRequests", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getRequestById: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getRequestById", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // saveRequest: string, string, string, string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "saveRequest", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // deleteRequest: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "deleteRequest", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getAllLoans: 'a
+  params.clear();
+  functions.push_back(make_unique<FuncDecl>(
+      "getAllLoans", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // getLoanById: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "getLoanById", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // acceptRequest: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "acceptRequest", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // returnBook: string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "returnBook", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
+
+  // saveLoan: string, string, string, string -> 'a
+  params.clear();
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  params.push_back(mkString());
+  functions.push_back(make_unique<FuncDecl>(
+      "saveLoan", std::move(params),
+      std::make_pair(HTTPResponseCode::OK_200, make_unique<TypeVar>("a"))));
 
   /* =====================================================
    * 4. API BLOCKS
@@ -66,7 +228,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
   /* ---------- getAllBooksOk ---------- */
   {
     // PRE: true (public endpoint)
-    auto pre = make_unique<Num>(1);
+    auto pre = make_unique<Bool>(true);
 
     // CALL: getAllBooks()
     vector<unique_ptr<Expr>> callArgs;
@@ -75,7 +237,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getAllBooksOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -99,7 +261,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getBookByCodeOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -119,11 +281,11 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> callArgs;
     callArgs.push_back(make_unique<Var>("bookCode"));
     auto call = make_unique<APIcall>(
-        make_unique<FuncCall>("getBookByCode", std::move(callArgs)),
+        make_unique<FuncCall>("getBookByCodeErr", std::move(callArgs)),
         Response(HTTPResponseCode::BAD_REQUEST_400, nullptr));
 
     // POST: true (returns 404)
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getBookByCodeErr", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -132,7 +294,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
   /* ---------- saveBookOk ---------- */
   {
     // PRE: true (anyone can add books in test mode)
-    auto pre = make_unique<Num>(1);
+    auto pre = make_unique<Bool>(true);
 
     // CALL: saveBook(bookTitle, bookAuthor, bookDesc)
     vector<unique_ptr<Expr>> callArgs;
@@ -149,7 +311,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> bPrimeArgs;
     bPrimeArgs.push_back(make_unique<Var>("B"));
     vector<unique_ptr<Expr>> domArgs;
-    domArgs.push_back(make_unique<FuncCall>("'", std::move(bPrimeArgs)));
+    domArgs.push_back(make_unique<FuncCall>("primed", std::move(bPrimeArgs)));
     postInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs)));
     auto post = make_unique<FuncCall>("in", std::move(postInArgs));
 
@@ -183,7 +345,8 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> bPrimeArgs;
     bPrimeArgs.push_back(make_unique<Var>("B"));
     vector<unique_ptr<Expr>> postDomArgs;
-    postDomArgs.push_back(make_unique<FuncCall>("'", std::move(bPrimeArgs)));
+    postDomArgs.push_back(
+        make_unique<FuncCall>("primed", std::move(bPrimeArgs)));
     postInArgs.push_back(make_unique<FuncCall>("dom", std::move(postDomArgs)));
     auto post = make_unique<FuncCall>("in", std::move(postInArgs));
 
@@ -214,7 +377,8 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> bPrimeArgs;
     bPrimeArgs.push_back(make_unique<Var>("B"));
     vector<unique_ptr<Expr>> postDomArgs;
-    postDomArgs.push_back(make_unique<FuncCall>("'", std::move(bPrimeArgs)));
+    postDomArgs.push_back(
+        make_unique<FuncCall>("primed", std::move(bPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(postDomArgs)));
     auto post = make_unique<FuncCall>("not_in", std::move(notInArgs));
 
@@ -229,7 +393,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
   /* ---------- getAllStudentsOk ---------- */
   {
     // PRE: true
-    auto pre = make_unique<Num>(1);
+    auto pre = make_unique<Bool>(true);
 
     // CALL: getAllStudents()
     vector<unique_ptr<Expr>> callArgs;
@@ -238,7 +402,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getAllStudentsOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -262,7 +426,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getStudentByIdOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -282,11 +446,11 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> callArgs;
     callArgs.push_back(make_unique<Var>("studentId"));
     auto call = make_unique<APIcall>(
-        make_unique<FuncCall>("getStudentById", std::move(callArgs)),
+        make_unique<FuncCall>("getStudentByIdErr", std::move(callArgs)),
         Response(HTTPResponseCode::BAD_REQUEST_400, nullptr));
 
     // POST: true (returns 404)
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getStudentByIdErr", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -295,7 +459,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
   /* ---------- saveStudentOk ---------- */
   {
     // PRE: true
-    auto pre = make_unique<Num>(1);
+    auto pre = make_unique<Bool>(true);
 
     // CALL: saveStudent(studentName, studentEmail, studentPhone)
     vector<unique_ptr<Expr>> callArgs;
@@ -312,7 +476,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> sPrimeArgs;
     sPrimeArgs.push_back(make_unique<Var>("S"));
     vector<unique_ptr<Expr>> domArgs;
-    domArgs.push_back(make_unique<FuncCall>("'", std::move(sPrimeArgs)));
+    domArgs.push_back(make_unique<FuncCall>("primed", std::move(sPrimeArgs)));
     postInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs)));
     auto post = make_unique<FuncCall>("in", std::move(postInArgs));
 
@@ -346,7 +510,8 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> sPrimeArgs;
     sPrimeArgs.push_back(make_unique<Var>("S"));
     vector<unique_ptr<Expr>> postDomArgs;
-    postDomArgs.push_back(make_unique<FuncCall>("'", std::move(sPrimeArgs)));
+    postDomArgs.push_back(
+        make_unique<FuncCall>("primed", std::move(sPrimeArgs)));
     postInArgs.push_back(make_unique<FuncCall>("dom", std::move(postDomArgs)));
     auto post = make_unique<FuncCall>("in", std::move(postInArgs));
 
@@ -377,7 +542,8 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> sPrimeArgs;
     sPrimeArgs.push_back(make_unique<Var>("S"));
     vector<unique_ptr<Expr>> postDomArgs;
-    postDomArgs.push_back(make_unique<FuncCall>("'", std::move(sPrimeArgs)));
+    postDomArgs.push_back(
+        make_unique<FuncCall>("primed", std::move(sPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(postDomArgs)));
     auto post = make_unique<FuncCall>("not_in", std::move(notInArgs));
 
@@ -392,7 +558,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
   /* ---------- getAllRequestsOk ---------- */
   {
     // PRE: true
-    auto pre = make_unique<Num>(1);
+    auto pre = make_unique<Bool>(true);
 
     // CALL: getAllRequests()
     vector<unique_ptr<Expr>> callArgs;
@@ -401,7 +567,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getAllRequestsOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -425,7 +591,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getRequestByIdOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -452,7 +618,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: saveRequest(studentId, bookCode, startDate, endDate)
     vector<unique_ptr<Expr>> callArgs;
@@ -470,7 +636,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> reqPrimeArgs;
     reqPrimeArgs.push_back(make_unique<Var>("Req"));
     vector<unique_ptr<Expr>> domArgs;
-    domArgs.push_back(make_unique<FuncCall>("'", std::move(reqPrimeArgs)));
+    domArgs.push_back(make_unique<FuncCall>("primed", std::move(reqPrimeArgs)));
     postInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs)));
     auto post = make_unique<FuncCall>("in", std::move(postInArgs));
 
@@ -501,7 +667,8 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> reqPrimeArgs;
     reqPrimeArgs.push_back(make_unique<Var>("Req"));
     vector<unique_ptr<Expr>> postDomArgs;
-    postDomArgs.push_back(make_unique<FuncCall>("'", std::move(reqPrimeArgs)));
+    postDomArgs.push_back(
+        make_unique<FuncCall>("primed", std::move(reqPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(postDomArgs)));
     auto post = make_unique<FuncCall>("not_in", std::move(notInArgs));
 
@@ -516,7 +683,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
   /* ---------- getAllLoansOk ---------- */
   {
     // PRE: true
-    auto pre = make_unique<Num>(1);
+    auto pre = make_unique<Bool>(true);
 
     // CALL: getAllLoans()
     vector<unique_ptr<Expr>> callArgs;
@@ -525,7 +692,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getAllLoansOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -549,7 +716,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
         Response(HTTPResponseCode::OK_200, nullptr));
 
     // POST: true
-    auto post = make_unique<Num>(1);
+    auto post = make_unique<Bool>(true);
 
     blocks.push_back(make_unique<API>("getLoanByIdOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -582,7 +749,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     loansPrimeArgs.push_back(make_unique<Var>("Loans"));
     vector<unique_ptr<Expr>> domArgsPost;
     domArgsPost.push_back(
-        make_unique<FuncCall>("'", std::move(loansPrimeArgs)));
+        make_unique<FuncCall>("primed", std::move(loansPrimeArgs)));
     inArgsPost.push_back(make_unique<FuncCall>("dom", std::move(domArgsPost)));
     postArgs.push_back(make_unique<FuncCall>("in", std::move(inArgsPost)));
 
@@ -592,11 +759,12 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> reqPrimeArgs;
     reqPrimeArgs.push_back(make_unique<Var>("Req"));
     vector<unique_ptr<Expr>> domArgsPost2;
-    domArgsPost2.push_back(make_unique<FuncCall>("'", std::move(reqPrimeArgs)));
+    domArgsPost2.push_back(
+        make_unique<FuncCall>("primed", std::move(reqPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgsPost2)));
     postArgs.push_back(make_unique<FuncCall>("not_in", std::move(notInArgs)));
 
-    auto post = make_unique<FuncCall>("AND", std::move(postArgs));
+    auto post = make_unique<FuncCall>("and", std::move(postArgs));
 
     blocks.push_back(make_unique<API>("acceptRequestOk", std::move(pre),
                                       std::move(call), std::move(post)));
@@ -626,7 +794,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     loansPrimeArgs.push_back(make_unique<Var>("Loans"));
     vector<unique_ptr<Expr>> postDomArgs;
     postDomArgs.push_back(
-        make_unique<FuncCall>("'", std::move(loansPrimeArgs)));
+        make_unique<FuncCall>("primed", std::move(loansPrimeArgs)));
     notInArgs.push_back(make_unique<FuncCall>("dom", std::move(postDomArgs)));
     auto post = make_unique<FuncCall>("not_in", std::move(notInArgs));
 
@@ -653,7 +821,7 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     inArgs2.push_back(make_unique<FuncCall>("dom", std::move(domArgs2)));
     preArgs.push_back(make_unique<FuncCall>("in", std::move(inArgs2)));
 
-    auto pre = make_unique<FuncCall>("AND", std::move(preArgs));
+    auto pre = make_unique<FuncCall>("and", std::move(preArgs));
 
     // CALL: saveLoan(studentId, bookCode, startDate, endDate)
     vector<unique_ptr<Expr>> callArgs;
@@ -671,11 +839,12 @@ std::unique_ptr<Spec> makeLibrarySpec() {
     vector<unique_ptr<Expr>> loansPrimeArgs;
     loansPrimeArgs.push_back(make_unique<Var>("Loans"));
     vector<unique_ptr<Expr>> domArgs;
-    domArgs.push_back(make_unique<FuncCall>("'", std::move(loansPrimeArgs)));
+    domArgs.push_back(
+        make_unique<FuncCall>("primed", std::move(loansPrimeArgs)));
     postInArgs.push_back(make_unique<FuncCall>("dom", std::move(domArgs)));
     auto post = make_unique<FuncCall>("in", std::move(postInArgs));
 
-    blocks.push_back(make_unique<API>("saveLoakOk", std::move(pre),
+    blocks.push_back(make_unique<API>("saveLoanOk", std::move(pre),
                                       std::move(call), std::move(post)));
   }
 
